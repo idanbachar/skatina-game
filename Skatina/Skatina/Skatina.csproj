@@ -42,6 +42,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Map\Entity.cs" />
+    <Compile Include="Map\Floor.cs" />
+    <Compile Include="Map\Level.cs" />
+    <Compile Include="Map\Map.cs" />
+    <Compile Include="Player\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
