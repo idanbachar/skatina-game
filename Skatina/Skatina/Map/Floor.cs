@@ -11,6 +11,9 @@ namespace Skatina
 {
     public class Floor : Entity
     {
+        public const int Width = 188;
+        public const int Height = 18;
+
         public Floor(Vector2 position) : base(position)
         {
             Gravity = false;
@@ -19,7 +22,7 @@ namespace Skatina
         public override void LoadContent(ContentManager content)
         {
             Texture = content.Load<Texture2D>("images/map/floor");
-            Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+            Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
         public override void Update(GameTime gametime)
@@ -29,12 +32,7 @@ namespace Skatina
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Rectangle, Color.White);
-        }
-
-        public override void SetRectangle(Rectangle rectangle)
-        {
-         
+            base.Draw(spriteBatch);
         }
     }
 }
