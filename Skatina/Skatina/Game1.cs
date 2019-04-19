@@ -12,12 +12,16 @@ namespace Skatina
         public static ContentManager GameContent;
         private Map Map;
         private Player Player;
+        private Camera Camera;
+        private bool IsPressedSpace;
 
         public Game1()
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            Graphics.PreferredBackBufferWidth = 600;
+            Graphics.PreferredBackBufferHeight = 700;
         }
 
         protected override void Initialize()
@@ -29,6 +33,8 @@ namespace Skatina
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             GameContent = Content;
+
+            Camera = new Camera(GraphicsDevice.Viewport);
 
             Map = new Map();
             Player = new Player(new Vector2(0, 0));
@@ -46,7 +52,9 @@ namespace Skatina
                 Exit();
 
 
+            Player.CheckIntersectsWithEntities(Map.Levels[Map.CurrentLevelIndex].LevelEntities);
             Player.Update(gameTime);
+            Camera.Focus(Player.Position, Map.Levels[Map.CurrentLevelIndex].GetWidth * 100, Map.Levels[Map.CurrentLevelIndex].GetHeight * 50);
 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
                 Player.MoveRight();
@@ -54,7 +62,19 @@ namespace Skatina
             if (Keyboard.GetState().IsKeyDown(Keys.A))
                 Player.MoveLeft();
 
-            Player.CheckIntersectsWithEntities(Map.Levels[Map.CurrentLevelIndex].LevelEntities);
+            if(Keyboard.GetState().IsKeyDown(Keys.Space) && !IsPressedSpace)
+            {
+                IsPressedSpace = true;
+                if (!Player.IsJump && Player.IsOnTopOfEntity)
+                {
+                    Player.IsJump = true;
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Space))
+            {
+                IsPressedSpace = false;
+            }
 
 
             base.Update(gameTime);
@@ -64,7 +84,7 @@ namespace Skatina
         {
             GraphicsDevice.Clear(Color.White);
 
-            SpriteBatch.Begin();
+            SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
 
             Map.Draw(SpriteBatch);
             Player.Draw(SpriteBatch);

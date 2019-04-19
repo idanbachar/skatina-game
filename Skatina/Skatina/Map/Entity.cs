@@ -36,22 +36,27 @@ namespace Skatina
 
         public virtual void Fall()
         {
-            SetPosition(new Vector2(Position.X, Position.Y + 2f));
+            SetPosition(new Vector2(Position.X, Position.Y + 3.5f));
         }
 
-        public virtual void CheckIntersectsWithEntities(Entity [,] entities)
+        public virtual void CheckIntersectsWithEntities(Entity[,] entities)
         {
             foreach (Entity entity in entities)
             {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible)
+                if (entity.Visible)
                 {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top + 50 < entity.Rectangle.Bottom)
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top - Rectangle.Height / 2 <= entity.Rectangle.Bottom)
                         if ((Rectangle.Left + 25 >= entity.Rectangle.Left && Rectangle.Left + 125 <= entity.Rectangle.Right) &&
-                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
+                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left) &&
+                            Rectangle.Intersects(entity.Rectangle))
+                        {
                             IsOnTopOfEntity = true;
-                        else
+                            break;
+                        }
+                        else 
                         {
                             IsOnTopOfEntity = false;
+                            continue;
                         }
                 }
             }

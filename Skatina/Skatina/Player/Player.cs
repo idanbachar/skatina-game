@@ -13,10 +13,13 @@ namespace Skatina
     {
         public const int Width = 38;
         public const int Height = 38;
+        public bool IsJump;
+        private int JumpTimer;
 
         public Player(Vector2 position): base(position)
         {
-
+            IsJump = false;
+            JumpTimer = 0;
         }
 
         public override void LoadContent(ContentManager content)
@@ -35,10 +38,32 @@ namespace Skatina
             SetPosition(new Vector2(Position.X - 3, Position.Y));
         }
 
+        public void Jump()
+        {
+            if (JumpTimer < 45)
+            {
+                Gravity = false;
+                JumpTimer++;
+                SetPosition(new Vector2(Position.X, Position.Y - 2.5f));
+            }
+            else
+            {
+                Gravity = true;
+                JumpTimer = 0;
+                IsJump = false;
+            }
+        }
+
         public override void Update(GameTime gametime)
         {
 
+            if (IsJump)
+            {
+                Jump();
+            }
+
             base.Update(gametime);
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
