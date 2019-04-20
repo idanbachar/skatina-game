@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Skatina
 {
@@ -15,11 +16,13 @@ namespace Skatina
         public const int Height = 38;
         public bool IsJump;
         private int JumpTimer;
+        private bool IsPressedSpace;
 
         public Player(Vector2 position): base(position)
         {
             IsJump = false;
             JumpTimer = 0;
+            IsPressedSpace = false;
         }
 
         public override void LoadContent(ContentManager content)
@@ -54,15 +57,39 @@ namespace Skatina
             }
         }
 
-        public override void Update(GameTime gametime)
+        private void CheckKeyBoard(Map map)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                MoveRight();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                MoveLeft();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsPressedSpace)
+            {
+                IsPressedSpace = true;
+                if (!IsJump && IsCollisionEntitiy(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                {
+                    IsJump = true;
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Space))
+            {
+                IsPressedSpace = false;
+            }
+        }
+
+        public override void Update(GameTime gametime, Map map)
+        {
+            CheckKeyBoard(map);
 
             if (IsJump)
             {
                 Jump();
             }
 
-            base.Update(gametime);
+            base.Update(gametime, map);
 
         }
 

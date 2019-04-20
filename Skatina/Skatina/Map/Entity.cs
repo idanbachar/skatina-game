@@ -39,27 +39,25 @@ namespace Skatina
             SetPosition(new Vector2(Position.X, Position.Y + 3.5f));
         }
 
-        public virtual void CheckIntersectsWithEntities(Entity[,] entities)
+        public bool IsCollisionEntitiy(Entity[,] entities)
         {
             foreach (Entity entity in entities)
             {
-                if (entity.Visible)
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible)
                 {
                     if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top - Rectangle.Height / 2 <= entity.Rectangle.Bottom)
-                        if ((Rectangle.Left + 25 >= entity.Rectangle.Left && Rectangle.Left + 125 <= entity.Rectangle.Right) &&
-                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left) &&
-                            Rectangle.Intersects(entity.Rectangle))
+                    {
+                        if ((Rectangle.Left >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Right) ||
+                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
                         {
                             IsOnTopOfEntity = true;
-                            break;
+                            return true;
                         }
-                        else 
-                        {
-                            IsOnTopOfEntity = false;
-                            continue;
-                        }
+                    }
                 }
             }
+            IsOnTopOfEntity = false;
+            return false;
         }
 
         public virtual void LoadContent(ContentManager content)
@@ -67,13 +65,13 @@ namespace Skatina
 
         }
 
-        public virtual void Update(GameTime gametime)
+        public virtual void Update(GameTime gametime, Map map)
         {
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Rectangle.Width, Rectangle.Height);
 
             if (Gravity)
             {
-                if (!IsOnTopOfEntity)
+                if (!IsCollisionEntitiy(map.Levels[map.CurrentLevelIndex].LevelEntities))
                     Fall();
             }
         }
@@ -81,7 +79,7 @@ namespace Skatina
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if(Visible)
-                spriteBatch.Draw(Texture, Position, Color.White);
+                spriteBatch.Draw(Texture, Rectangle, Color.White);
         }
     }
 }

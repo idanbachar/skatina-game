@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Skatina
 {
-    public class Game1 : Game
+    public class Skatina : Game
     {
         private GraphicsDeviceManager Graphics;
         private SpriteBatch SpriteBatch;
@@ -13,9 +13,8 @@ namespace Skatina
         private Map Map;
         private Player Player;
         private Camera Camera;
-        private bool IsPressedSpace;
 
-        public Game1()
+        public Skatina()
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -51,30 +50,11 @@ namespace Skatina
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-
-            Player.CheckIntersectsWithEntities(Map.Levels[Map.CurrentLevelIndex].LevelEntities);
-            Player.Update(gameTime);
             Camera.Focus(Player.Position, Map.Levels[Map.CurrentLevelIndex].GetWidth * 100, Map.Levels[Map.CurrentLevelIndex].GetHeight * 50);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-                Player.MoveRight();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-                Player.MoveLeft();
 
-            if(Keyboard.GetState().IsKeyDown(Keys.Space) && !IsPressedSpace)
-            {
-                IsPressedSpace = true;
-                if (!Player.IsJump && Player.IsOnTopOfEntity)
-                {
-                    Player.IsJump = true;
-                }
-            }
-
-            if (Keyboard.GetState().IsKeyUp(Keys.Space))
-            {
-                IsPressedSpace = false;
-            }
+            Player.Update(gameTime, Map);
 
 
             base.Update(gameTime);

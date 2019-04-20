@@ -9,19 +9,19 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Skatina
 {
-    public class Floor : Entity
+    public class Wall : Entity
     {
-        public const int Width = 88;
-        public const int Height = 18;
+        public const int Width = 18;
+        public const int Height = 88;
 
-        public Floor(Vector2 position) : base(position)
+        public Wall(Vector2 position) : base(position)
         {
             Gravity = false;
         }
 
         public override void LoadContent(ContentManager content)
         {
-            Texture = content.Load<Texture2D>("images/map/floor");
+            Texture = content.Load<Texture2D>("images/map/wall");
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
