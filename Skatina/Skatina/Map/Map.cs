@@ -17,18 +17,16 @@ namespace Skatina
         {
             Levels = new Level[1];
             CurrentLevelIndex = 0;
+            Load();
+        }
+
+        public void Load()
+        {
             for (int i = 0; i < Levels.Length; i++)
             {
                 Levels[i] = new Level();
                 Levels[i].LoadLevel();
             }
-            
-            LoadLevel();
-        }
-
-        public void LoadLevel()
-        {
-
         }
 
         public void Draw(SpriteBatch spriteBatch)

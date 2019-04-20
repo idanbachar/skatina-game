@@ -27,7 +27,7 @@ namespace Skatina
 
         public override void Update(GameTime gametime, Map map)
         {
-
+            base.Update(gametime, map);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

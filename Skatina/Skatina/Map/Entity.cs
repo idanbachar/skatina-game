@@ -17,6 +17,8 @@ namespace Skatina
 
         public bool Gravity;
         public bool IsOnTopOfEntity;
+        public bool IsOnRightOfEntity;
+        public bool IsOnLeftOfEntity;
         public bool Visible;
 
         public Entity(Vector2 position)
@@ -26,6 +28,8 @@ namespace Skatina
 
             Gravity = true;
             IsOnTopOfEntity = false;
+            IsOnRightOfEntity = false;
+            IsOnLeftOfEntity = false;
             Visible = true;
         }
 
@@ -36,14 +40,14 @@ namespace Skatina
 
         public virtual void Fall()
         {
-            SetPosition(new Vector2(Position.X, Position.Y + 3.5f));
+            SetPosition(new Vector2(Position.X, Position.Y + 5f));
         }
 
-        public bool IsCollisionEntitiy(Entity[,] entities)
+        public bool IsOnTopFloor(Entity[,] entities)
         {
             foreach (Entity entity in entities)
             {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible)
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor)
                 {
                     if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top - Rectangle.Height / 2 <= entity.Rectangle.Bottom)
                     {
@@ -60,6 +64,46 @@ namespace Skatina
             return false;
         }
 
+        public bool IsOnRightSideWall(Entity[,] entities)
+        {
+            foreach (Entity entity in entities)
+            {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
+                {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
+                    {
+                        if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left)
+                        {
+                            IsOnRightOfEntity = true;
+                            return true;
+                        }
+                    }
+                }
+            }
+            IsOnRightOfEntity = false;
+            return false;
+        }
+
+        public bool IsOnLeftSideWall(Entity[,] entities)
+        {
+            foreach (Entity entity in entities)
+            {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
+                {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
+                    {
+                        if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right)
+                        {
+                            IsOnLeftOfEntity = true;
+                            return true;
+                        }
+                    }
+                }
+            }
+            IsOnLeftOfEntity = false;
+            return false;
+        }
+
         public virtual void LoadContent(ContentManager content)
         {
 
@@ -71,7 +115,7 @@ namespace Skatina
 
             if (Gravity)
             {
-                if (!IsCollisionEntitiy(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                if (!IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities))
                     Fall();
             }
         }

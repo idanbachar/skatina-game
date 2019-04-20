@@ -7,7 +7,7 @@ namespace Skatina
 {
     public class Skatina : Game
     {
-        private GraphicsDeviceManager Graphics;
+        public static GraphicsDeviceManager Graphics;
         private SpriteBatch SpriteBatch;
         public static ContentManager GameContent;
         private Map Map;
@@ -50,11 +50,14 @@ namespace Skatina
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            Camera.Focus(Player.Position, Map.Levels[Map.CurrentLevelIndex].GetWidth * 100, Map.Levels[Map.CurrentLevelIndex].GetHeight * 50);
+            Camera.Focus(Player.Position, Map.Levels[Map.CurrentLevelIndex].GetWidth(), Map.Levels[Map.CurrentLevelIndex].GetHeight());
 
 
 
             Player.Update(gameTime, Map);
+            foreach (Entity entity in Map.Levels[Map.CurrentLevelIndex].LevelEntities)
+                entity.Update(gameTime, Map);
+
 
 
             base.Update(gameTime);

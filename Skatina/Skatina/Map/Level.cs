@@ -14,8 +14,16 @@ namespace Skatina
 
         public Level() { }
 
-        public int GetWidth { get { return LevelEntities.GetLength(1);} }
-        public int GetHeight { get { return LevelEntities.GetLength(0); } }
+    
+        public int GetWidth()
+        {
+            return LevelEntities.GetLength(1) * Floor.Width;
+        }
+
+        public int GetHeight()
+        {
+            return LevelEntities.GetLength(0) * Wall.Height;
+        }
 
         public void LoadLevel()
         {
@@ -25,13 +33,13 @@ namespace Skatina
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
-                {" "," "," "," ","|"," "," "," "," "," "," "," "," "," "," "},
-                {" "," "," "," ","|"," "," "," "," "," "," "," "," "," "," "},
-                {"_","_","_","_","_","_","_"," "," "," "," "," "," "," "," "},
-                {" "," "," "," "," "," "," ","|"," "," "," "," "," "," "," "},
-                {" "," "," "," "," "," "," ","|"," "," "," "," "," "," "," "},
-                {" "," "," "," "," "," "," ","|"," "," "," "," "," "," "," "},
-                {" "," "," "," "," "," "," ","|"," "," "," "," "," "," "," "},
+                {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
+                {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
+                {"_","_","_","|","_","_","^|^","_"," "," "," "," "," "," "," "},
+                {" "," "," "," "," "," "," "," ","|"," "," "," "," "," "," "},
+                {" "," "," "," "," "," "," "," ","|"," "," "," "," "," "," "},
+                {" "," "," "," "," "," "," "," ","|"," "," "," "," "," "," "},
+                {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
@@ -55,14 +63,18 @@ namespace Skatina
                             break;
 
                         case "_":
-                            LevelEntities[y, x] = new Floor(new Vector2(x * Floor.Width , y * Floor.Height * 2));
+                            LevelEntities[y, x] = new Floor(new Vector2(x > 0 && LevelSchema[y, x - 1] == "|"  ? (x * Wall.Height + Wall.Width * 2 - Wall.Height) : (x * Floor.Width) - Wall.Width, y * Floor.Height * 2));
                             LevelEntities[y, x].LoadContent(Skatina.GameContent);
                             break;
                         case "|":
-                            LevelEntities[y, x] = new Wall(new Vector2(x * Wall.Height + Wall.Width * 2, y * Wall.Height  - Wall.Height * 4));
-
+                            LevelEntities[y, x] = new Wall(new Vector2(x * Wall.Height + Wall.Width * 2 - Wall.Width * 2, y * Wall.Height  - Wall.Height * 4 - Wall.Width * 2));
                             LevelEntities[y, x].LoadContent(Skatina.GameContent);
                             break;
+                        case "^|^":
+                            LevelEntities[y, x] = new Wall(new Vector2(x * Wall.Height + Wall.Width * 2 - Wall.Width * 2, y * Wall.Height - Wall.Height * 4 - Wall.Width * 2));
+                            ((Wall)LevelEntities[y, x]).IsMove = true;
+                            LevelEntities[y, x].LoadContent(Skatina.GameContent);
+                            break; 
                     }
                 }
             }

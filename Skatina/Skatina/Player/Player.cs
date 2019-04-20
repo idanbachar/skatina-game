@@ -43,11 +43,11 @@ namespace Skatina
 
         public void Jump()
         {
-            if (JumpTimer < 45)
+            if (JumpTimer < 20)
             {
                 Gravity = false;
                 JumpTimer++;
-                SetPosition(new Vector2(Position.X, Position.Y - 2.5f));
+                SetPosition(new Vector2(Position.X, Position.Y - 7));
             }
             else
             {
@@ -60,15 +60,21 @@ namespace Skatina
         private void CheckKeyBoard(Map map)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.D))
-                MoveRight();
+            {
+                if (!IsOnRightSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                    MoveRight();
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.A))
-                MoveLeft();
+            {
+                if (!IsOnLeftSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                    MoveLeft();
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsPressedSpace)
             {
                 IsPressedSpace = true;
-                if (!IsJump && IsCollisionEntitiy(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                if (!IsJump && IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities))
                 {
                     IsJump = true;
                 }
@@ -80,6 +86,16 @@ namespace Skatina
             }
         }
 
+        private bool IsBelowMap(Map map)
+        {
+            return Rectangle.Top >= map.Levels[map.CurrentLevelIndex].GetHeight();
+        }
+
+        private void Respawn()
+        {
+            SetPosition(new Vector2(0, 0));
+        }
+
         public override void Update(GameTime gametime, Map map)
         {
             CheckKeyBoard(map);
@@ -87,6 +103,11 @@ namespace Skatina
             if (IsJump)
             {
                 Jump();
+            }
+
+            if (IsBelowMap(map))
+            {
+                Respawn();
             }
 
             base.Update(gametime, map);

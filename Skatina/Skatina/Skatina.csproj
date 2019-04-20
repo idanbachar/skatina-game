@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera\Camera.cs" />
+    <Compile Include="Direction.cs" />
     <Compile Include="Map\Wall.cs" />
     <Compile Include="Skatina.cs" />
     <Compile Include="Map\Entity.cs" />
