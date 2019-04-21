@@ -13,16 +13,27 @@ namespace Skatina
     {
         public const int Width = 18;
         public const int Height = 88;
-        public bool IsMove;
-        private int MoveTimer;
-        private Direction MoveDirection;
 
-        public Wall(Vector2 position) : base(position)
+        private int MoveTimer;
+        private int MaxMoveTimer;
+
+        private int StartShootTimer;
+
+        private Direction MoveDirection;
+        private Direction ShootDirection;
+        public WallType WallType;
+        public List<Bullet> Bullets;
+
+        public Wall(Vector2 position, WallType wallType, Direction shootDirection) : base(position)
         {
             Gravity = false;
-            IsMove = false;
             MoveTimer = 0;
+            MaxMoveTimer = 50;
             MoveDirection = Direction.Up;
+            ShootDirection = shootDirection;
+            WallType = wallType;
+            Bullets = new List<Bullet>();
+            StartShootTimer = 0;
         }
 
         public override void LoadContent(ContentManager content)
@@ -35,23 +46,58 @@ namespace Skatina
         {
             base.Update(gametime, map);
 
-            if (IsMove)
+            if (WallType == WallType.Moving || WallType == WallType.DeadlyMoving)
             {
                 Move();
             }
+
+            if(WallType == WallType.DeadlyMoving)
+            {
+                if (StartShootTimer < 50)
+                    StartShootTimer++;
+                else
+                {
+                    Shoot();
+                    StartShootTimer = 0;
+                }
+            }
+
+            for (int i = 0; i < Bullets.Count; i++)
+            {
+                if (!Bullets[i].IsOnLeftSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                    Bullets[i].Update(gametime, map);
+                else
+                {
+                    Bullets.RemoveAt(i);
+                }
+            }
+        }
+
+        public void Shoot()
+        {
+            int xPos = ShootDirection == Direction.Left ? Rectangle.Left - 36 : Rectangle.Right + 36;
+            int yPos = Rectangle.Top + Rectangle.Height / 2;
+
+            Bullet bullet = new Bullet(new Vector2(xPos, yPos), ShootDirection);
+            bullet.LoadContent(Skatina.GameContent);
+            Bullets.Add(bullet);
         }
 
         public void Move()
         {
-            if (MoveTimer < 50)
+            if (MoveTimer < MaxMoveTimer)
             {
                 MoveTimer++;
 
                 if (MoveDirection == Direction.Up)
+                {
                     SetPosition(new Vector2(Position.X, Position.Y - 3));
+                }
 
                 if (MoveDirection == Direction.Down)
+                {
                     SetPosition(new Vector2(Position.X, Position.Y + 3));
+                }
             }
             else
             {
@@ -63,14 +109,28 @@ namespace Skatina
         private void SwapDirection()
         {
             if (MoveDirection == Direction.Up)
+            {
                 MoveDirection = Direction.Down;
+            }
             else if (MoveDirection == Direction.Down)
+            {
                 MoveDirection = Direction.Up;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (Visible)
+            {
+                if (WallType == WallType.Moving || WallType == WallType.Regular)
+                    spriteBatch.Draw(Texture, Rectangle, Color.White);
+                else if (WallType == WallType.Deadly || WallType == WallType.DeadlyMoving)
+                    spriteBatch.Draw(Texture, Rectangle, Color.Red);
+
+
+                foreach (Bullet bullet in Bullets)
+                    bullet.Draw(spriteBatch);
+            }
         }
     }
 }

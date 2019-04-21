@@ -17,12 +17,14 @@ namespace Skatina
         public bool IsJump;
         private int JumpTimer;
         private bool IsPressedSpace;
+        private bool IsDead;
 
         public Player(Vector2 position): base(position)
         {
             IsJump = false;
             JumpTimer = 0;
             IsPressedSpace = false;
+            IsDead = false;
         }
 
         public override void LoadContent(ContentManager content)
@@ -39,6 +41,54 @@ namespace Skatina
         public void MoveLeft()
         {
             SetPosition(new Vector2(Position.X - 3, Position.Y));
+        }
+
+        public override bool IsOnRightSideWall(Entity[,] entities)
+        {
+            foreach (Entity entity in entities)
+            {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
+                {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
+                    {
+                        if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left)
+                        {
+                            IsOnRightOfEntity = true;
+
+                            if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
+                                IsDead = true;
+
+                            return true;
+                        }
+                    }
+                }
+            }
+            IsOnRightOfEntity = false;
+            return false;
+        }
+
+        public override bool IsOnLeftSideWall(Entity[,] entities)
+        {
+            foreach (Entity entity in entities)
+            {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
+                {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
+                    {
+                        if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right)
+                        {
+                            IsOnLeftOfEntity = true;
+
+                            if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
+                                IsDead = true;
+
+                            return true;
+                        }
+                    }
+                }
+            }
+            IsOnLeftOfEntity = false;
+            return false;
         }
 
         public void Jump()
@@ -59,6 +109,7 @@ namespace Skatina
 
         private void CheckKeyBoard(Map map)
         {
+ 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 if (!IsOnRightSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
@@ -93,12 +144,16 @@ namespace Skatina
 
         private void Respawn()
         {
+            IsDead = false;
             SetPosition(new Vector2(0, 0));
         }
 
         public override void Update(GameTime gametime, Map map)
         {
-            CheckKeyBoard(map);
+            if (!IsDead)
+            {
+                CheckKeyBoard(map);
+            }
 
             if (IsJump)
             {
@@ -109,6 +164,7 @@ namespace Skatina
             {
                 Respawn();
             }
+ 
 
             base.Update(gametime, map);
 

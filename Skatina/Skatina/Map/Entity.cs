@@ -64,7 +64,7 @@ namespace Skatina
             return false;
         }
 
-        public bool IsOnRightSideWall(Entity[,] entities)
+        public virtual bool IsOnRightSideWall(Entity[,] entities)
         {
             foreach (Entity entity in entities)
             {
@@ -84,7 +84,7 @@ namespace Skatina
             return false;
         }
 
-        public bool IsOnLeftSideWall(Entity[,] entities)
+        public virtual bool IsOnLeftSideWall(Entity[,] entities)
         {
             foreach (Entity entity in entities)
             {
