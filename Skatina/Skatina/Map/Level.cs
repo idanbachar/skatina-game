@@ -35,7 +35,7 @@ namespace Skatina
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "},
-                {"_","_","_","|","_","_","^|^","_"," "," "," "," "," "," "," "},
+                {"_","_","_","|","_"," ","^|v","_"," "," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," ","|"," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," ","|"," "," "," "," "," "," "},
                 {" "," "," "," "," "," "," "," ","|"," "," "," "," "," "," "},
@@ -54,6 +54,9 @@ namespace Skatina
             {
                 for (int x = 0; x < LevelSchema.GetLength(1); x++)
                 {
+                    int xPos = 0;
+                    int yPos = 0;
+
                     switch (LevelSchema[y, x])
                     {
                         case " ":
@@ -61,17 +64,23 @@ namespace Skatina
                             LevelEntities[y, x].LoadContent(Skatina.GameContent);
                             LevelEntities[y, x].Visible = false;
                             break;
-
                         case "_":
-                            LevelEntities[y, x] = new Floor(new Vector2(x > 0 && LevelSchema[y, x - 1] == "|"  ? (x * Wall.Height + Wall.Width * 2 - Wall.Height) : (x * Floor.Width) - Wall.Width, y * Floor.Height * 2));
+                            xPos = x * Floor.Width;
+                            yPos = y * Floor.Width;
+
+                            LevelEntities[y, x] = new Floor(new Vector2(xPos, yPos));
                             LevelEntities[y, x].LoadContent(Skatina.GameContent);
                             break;
                         case "|":
-                            LevelEntities[y, x] = new Wall(new Vector2(x * Wall.Height + Wall.Width * 2 - Wall.Width * 2, y * Wall.Height  - Wall.Height * 4 - Wall.Width * 2));
+                            xPos = LevelSchema[y, x - 1] == "_" ? x * Wall.Height + Wall.Width * 2  : x * Wall.Height;
+                            yPos = y * Wall.Height - Wall.Width * 2;
+                            LevelEntities[y, x] = new Wall(new Vector2(xPos, yPos));
                             LevelEntities[y, x].LoadContent(Skatina.GameContent);
                             break;
-                        case "^|^":
-                            LevelEntities[y, x] = new Wall(new Vector2(x * Wall.Height + Wall.Width * 2 - Wall.Width * 2, y * Wall.Height - Wall.Height * 4 - Wall.Width * 2));
+                        case "^|v":
+                            xPos = x * Wall.Height;
+                            yPos = y * Wall.Height;
+                            LevelEntities[y, x] = new Wall(new Vector2(xPos, yPos));
                             ((Wall)LevelEntities[y, x]).IsMove = true;
                             LevelEntities[y, x].LoadContent(Skatina.GameContent);
                             break; 
