@@ -14,6 +14,8 @@ namespace Skatina
         private Player Player;
         private Camera Camera;
 
+        private SpriteFont TitleFont;
+
         public Skatina()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -34,7 +36,7 @@ namespace Skatina
             GameContent = Content;
 
             Camera = new Camera(GraphicsDevice.Viewport);
-
+            TitleFont = GameContent.Load<SpriteFont>("fonts/TitleFont");
             Map = new Map();
             Player = new Player(new Vector2(0, 0));
             Player.LoadContent(Content);
@@ -71,6 +73,15 @@ namespace Skatina
 
             Map.Draw(SpriteBatch);
             Player.Draw(SpriteBatch);
+
+            SpriteBatch.End();
+
+            SpriteBatch.Begin();
+
+
+            SpriteBatch.DrawString(TitleFont, "Tries: " + Map.Levels[Map.CurrentLevelIndex].Tries, new Vector2(0, 0), Color.Black);
+
+            SpriteBatch.DrawString(TitleFont, "Level (" + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ")", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 50, 50), Color.Black);
 
             SpriteBatch.End();
 

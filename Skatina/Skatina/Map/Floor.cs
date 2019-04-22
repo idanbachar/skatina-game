@@ -82,7 +82,13 @@ namespace Skatina
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (Visible)
+            {
+                if (FloorType == FloorType.Finish)
+                    spriteBatch.Draw(Texture, Rectangle, Color.Green);
+                else if (FloorType == FloorType.Regular || FloorType == FloorType.Moving)
+                    spriteBatch.Draw(Texture, Rectangle, Color.White);
+            }
         }
     }
 }

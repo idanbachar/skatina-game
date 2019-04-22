@@ -9,6 +9,7 @@ namespace Skatina
     public enum FloorType
     {
         Regular,
-        Moving
+        Moving,
+        Finish
     }
 }

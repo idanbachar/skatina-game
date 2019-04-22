@@ -185,8 +185,9 @@ namespace Skatina
             return Rectangle.Top >= map.Levels[map.CurrentLevelIndex].GetHeight();
         }
 
-        private void Respawn()
+        private void Respawn(Map map)
         {
+            map.Levels[map.CurrentLevelIndex].AddTry();
             IsDead = false;
             IsColide = true;
             SetPosition(new Vector2(0, 0));
@@ -219,7 +220,7 @@ namespace Skatina
 
             if (IsBelowMap(map))
             {
-                Respawn();
+                Respawn(map);
             }
 
             if(CurrentMovingFloor != null)
