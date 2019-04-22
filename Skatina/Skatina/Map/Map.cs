@@ -16,7 +16,7 @@ namespace Skatina
         public Map()
         {
             Levels = new Level[3];
-            CurrentLevelIndex = 2;
+            CurrentLevelIndex = 0;
             Load();
         }
 
