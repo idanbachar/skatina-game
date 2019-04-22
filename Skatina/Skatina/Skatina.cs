@@ -38,6 +38,7 @@ namespace Skatina
             Camera = new Camera(GraphicsDevice.Viewport);
             TitleFont = GameContent.Load<SpriteFont>("fonts/TitleFont");
             Map = new Map();
+
             Player = new Player(new Vector2(0, 0));
             Player.LoadContent(Content);
         }
@@ -52,15 +53,15 @@ namespace Skatina
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            Camera.Focus(Player.Position, Map.Levels[Map.CurrentLevelIndex].GetWidth(), Map.Levels[Map.CurrentLevelIndex].GetHeight());
-
-
+            Camera.Focus(Player.Position,
+                         Map.Levels[Map.CurrentLevelIndex].GetWidth(),
+                         Map.Levels[Map.CurrentLevelIndex].GetHeight()
+                         );
 
             Player.Update(gameTime, Map);
+
             foreach (Entity entity in Map.Levels[Map.CurrentLevelIndex].LevelEntities)
                 entity.Update(gameTime, Map);
-
-
 
             base.Update(gameTime);
         }

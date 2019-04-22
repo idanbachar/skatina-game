@@ -21,6 +21,7 @@ namespace Skatina
         private float Speed;
 
         private Floor CurrentMovingFloor;
+        private Floor CurrentFinishFloor;
 
         public Player(Vector2 position): base(position)
         {
@@ -29,6 +30,7 @@ namespace Skatina
             IsPressedSpace = false;
             IsDead = false;
             CurrentMovingFloor = null;
+            CurrentFinishFloor = null;
             Speed = 2.5f;
         }
 
@@ -109,12 +111,14 @@ namespace Skatina
                         {
                             IsOnTopOfEntity = true;
                             CurrentMovingFloor = ((Floor)entity).FloorType == FloorType.Moving ? (Floor)entity : null;
+                            CurrentFinishFloor = ((Floor)entity).FloorType == FloorType.Finish ? (Floor)entity : null;
                             return true;
                         }
                     }
                 }
             }
             CurrentMovingFloor = null;
+            CurrentFinishFloor = null;
             IsOnTopOfEntity = false;
             return false;
         }
@@ -193,6 +197,13 @@ namespace Skatina
             SetPosition(new Vector2(0, 0));
         }
 
+        private void RespawnNewLevel(Map map)
+        {
+            IsDead = false;
+            IsColide = true;
+            SetPosition(new Vector2(0, 0));
+        }
+
         public override void Update(GameTime gametime, Map map)
         {
             if (!IsDead)
@@ -229,6 +240,12 @@ namespace Skatina
                     SetPosition(new Vector2(Position.X + 1, Position.Y));
                 else if (CurrentMovingFloor.MoveDirection == Direction.Left)
                     SetPosition(new Vector2(Position.X - 1, Position.Y));
+            }
+
+            if(CurrentFinishFloor != null)
+            {
+                map.NextLevel();
+                RespawnNewLevel(map);
             }
  
 
