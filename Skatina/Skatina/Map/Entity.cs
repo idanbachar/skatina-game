@@ -20,6 +20,7 @@ namespace Skatina
         public bool IsOnRightOfEntity;
         public bool IsOnLeftOfEntity;
         public bool Visible;
+        public bool IsColide;
 
         public Entity(Vector2 position)
         {
@@ -31,6 +32,7 @@ namespace Skatina
             IsOnRightOfEntity = false;
             IsOnLeftOfEntity = false;
             Visible = true;
+            IsColide = true;
         }
 
         public virtual void SetPosition(Vector2 position)
@@ -43,13 +45,13 @@ namespace Skatina
             SetPosition(new Vector2(Position.X, Position.Y + 5f));
         }
 
-        public bool IsOnTopFloor(Entity[,] entities)
+        public virtual bool IsOnTopFloor(List<Entity> entities)
         {
             foreach (Entity entity in entities)
             {
                 if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor)
                 {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top - Rectangle.Height / 2 <= entity.Rectangle.Bottom)
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top)
                     {
                         if ((Rectangle.Left >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Right) ||
                             (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
@@ -64,7 +66,7 @@ namespace Skatina
             return false;
         }
 
-        public virtual bool IsOnRightSideWall(Entity[,] entities)
+        public virtual bool IsOnRightSideWall(List<Entity> entities)
         {
             foreach (Entity entity in entities)
             {
@@ -84,7 +86,7 @@ namespace Skatina
             return false;
         }
 
-        public virtual bool IsOnLeftSideWall(Entity[,] entities)
+        public virtual bool IsOnLeftSideWall(List<Entity> entities)
         {
             foreach (Entity entity in entities)
             {
@@ -115,7 +117,7 @@ namespace Skatina
 
             if (Gravity)
             {
-                if (!IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                if (!IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities) || !IsColide)
                     Fall();
             }
         }

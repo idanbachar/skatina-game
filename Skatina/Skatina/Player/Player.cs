@@ -18,6 +18,9 @@ namespace Skatina
         private int JumpTimer;
         private bool IsPressedSpace;
         private bool IsDead;
+        private float Speed;
+
+        private Floor CurrentMovingFloor;
 
         public Player(Vector2 position): base(position)
         {
@@ -25,6 +28,8 @@ namespace Skatina
             JumpTimer = 0;
             IsPressedSpace = false;
             IsDead = false;
+            CurrentMovingFloor = null;
+            Speed = 2.5f;
         }
 
         public override void LoadContent(ContentManager content)
@@ -35,15 +40,15 @@ namespace Skatina
 
         public void MoveRight()
         {
-            SetPosition(new Vector2(Position.X + 3, Position.Y));
+            SetPosition(new Vector2(Position.X + Speed, Position.Y));
         }
 
         public void MoveLeft()
         {
-            SetPosition(new Vector2(Position.X - 3, Position.Y));
+            SetPosition(new Vector2(Position.X - Speed, Position.Y));
         }
 
-        public override bool IsOnRightSideWall(Entity[,] entities)
+        public override bool IsOnRightSideWall(List<Entity> entities)
         {
             foreach (Entity entity in entities)
             {
@@ -67,7 +72,7 @@ namespace Skatina
             return false;
         }
 
-        public override bool IsOnLeftSideWall(Entity[,] entities)
+        public override bool IsOnLeftSideWall(List<Entity> entities)
         {
             foreach (Entity entity in entities)
             {
@@ -91,6 +96,44 @@ namespace Skatina
             return false;
         }
 
+        public override bool IsOnTopFloor(List<Entity> entities)
+        {
+            foreach (Entity entity in entities)
+            {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor)
+                {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top)
+                    {
+                        if ((Rectangle.Left >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Right) ||
+                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
+                        {
+                            IsOnTopOfEntity = true;
+                            CurrentMovingFloor = ((Floor)entity).FloorType == FloorType.Moving ? (Floor)entity : null;
+                            return true;
+                        }
+                    }
+                }
+            }
+            CurrentMovingFloor = null;
+            IsOnTopOfEntity = false;
+            return false;
+        }
+
+        public void CheckBulletsCollision(List<Bullet> bullets)
+        {
+            for(int i = 0; i < bullets.Count; i++)
+            {
+                if(bullets[i] is Bullet)
+                {
+                    if (Rectangle.Intersects(bullets[i].Rectangle))
+                    {
+                        bullets.RemoveAt(i);
+                        IsDead = true;
+                    }
+                }
+            }
+        }
+
         public void Jump()
         {
             if (JumpTimer < 20)
@@ -110,13 +153,13 @@ namespace Skatina
         private void CheckKeyBoard(Map map)
         {
  
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 if (!IsOnRightSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
                     MoveRight();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 if (!IsOnLeftSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
                     MoveLeft();
@@ -145,6 +188,7 @@ namespace Skatina
         private void Respawn()
         {
             IsDead = false;
+            IsColide = true;
             SetPosition(new Vector2(0, 0));
         }
 
@@ -153,6 +197,19 @@ namespace Skatina
             if (!IsDead)
             {
                 CheckKeyBoard(map);
+
+                foreach (Entity entity in map.Levels[map.CurrentLevelIndex].LevelEntities)
+                {
+                    if (entity is Wall)
+                    {
+                        Wall wall = entity as Wall;
+                        CheckBulletsCollision(wall.Bullets);
+                    }
+                }
+            }
+            else
+            {
+                IsColide = false;
             }
 
             if (IsJump)
@@ -163,6 +220,14 @@ namespace Skatina
             if (IsBelowMap(map))
             {
                 Respawn();
+            }
+
+            if(CurrentMovingFloor != null)
+            {
+                if (CurrentMovingFloor.MoveDirection == Direction.Right)
+                    SetPosition(new Vector2(Position.X + 1, Position.Y));
+                else if (CurrentMovingFloor.MoveDirection == Direction.Left)
+                    SetPosition(new Vector2(Position.X - 1, Position.Y));
             }
  
 

@@ -75,7 +75,7 @@ namespace Skatina
 
         public void Shoot()
         {
-            int xPos = ShootDirection == Direction.Left ? Rectangle.Left - 36 : Rectangle.Right + 36;
+            int xPos = ShootDirection == Direction.Left ? Rectangle.Left - Bullet.Width : Rectangle.Right + Bullet.Width;
             int yPos = Rectangle.Top + Rectangle.Height / 2;
 
             Bullet bullet = new Bullet(new Vector2(xPos, yPos), ShootDirection);
