@@ -105,6 +105,9 @@ namespace Skatina
 
                 SpriteBatch.DrawString(TitleFont, "Tries: " + Map.Levels[Map.CurrentLevelIndex].Tries, new Vector2(0, 0), Color.Black);
 
+
+                SpriteBatch.DrawString(TitleFont, "Skatina", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 40, 25), Color.Black);
+
                 SpriteBatch.DrawString(TitleFont, "Level (" + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ")", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 50, 50), Color.Black);
 
                 SpriteBatch.End();
@@ -113,6 +116,7 @@ namespace Skatina
             else
             {
                 SpriteBatch.Begin();
+                SpriteBatch.DrawString(TitleFont, "Skatina", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 40, 25), Color.Black);
                 SpriteBatch.DrawString(TitleFont, "Game Over!", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 60, 150), Color.Red);
                 SpriteBatch.DrawString(TitleFont, "*You Tried " + Map.GetTotalTries() + " times in total.", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 180), Color.Red);
                 SpriteBatch.DrawString(TitleFont, "*You Finished in level " + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ".", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 210), Color.Red);
