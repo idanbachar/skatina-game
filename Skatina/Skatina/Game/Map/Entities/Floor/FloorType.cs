@@ -10,6 +10,7 @@ namespace Skatina
     {
         Regular,
         Moving,
-        Finish
+        Finish,
+        Jump
     }
 }

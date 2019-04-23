@@ -84,10 +84,19 @@ namespace Skatina
         {
             if (Visible)
             {
-                if (FloorType == FloorType.Finish)
-                    spriteBatch.Draw(Texture, Rectangle, Color.Green);
-                else if (FloorType == FloorType.Regular || FloorType == FloorType.Moving)
-                    spriteBatch.Draw(Texture, Rectangle, Color.White);
+                switch (FloorType)
+                {
+                    case FloorType.Regular:
+                    case FloorType.Moving:
+                        spriteBatch.Draw(Texture, Rectangle, Color.White);
+                        break;
+                    case FloorType.Finish:
+                        spriteBatch.Draw(Texture, Rectangle, Color.LightGreen);
+                        break;
+                    case FloorType.Jump:
+                        spriteBatch.Draw(Texture, Rectangle, Color.LightSkyBlue);
+                        break;
+                }                    
             }
         }
     }

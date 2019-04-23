@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Skatina")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("Idan Bachar")]
+[assembly: AssemblyCopyright("Copyright ©  2019 Idan Bachar")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
