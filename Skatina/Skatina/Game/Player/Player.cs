@@ -16,17 +16,21 @@ namespace Skatina
         public const int Height = 38;
         public bool IsJump;
         private int JumpTimer;
+        private int JumpTimerEndTime;
         private bool IsPressedSpace;
         private bool IsDead;
         private float Speed;
 
-        private Floor CurrentMovingFloor;
-        private Floor CurrentFinishFloor;
+        private Texture2D DeadTexture;
+
+        public Floor CurrentMovingFloor;
+        public Floor CurrentFinishFloor;
 
         public Player(Vector2 position): base(position)
         {
             IsJump = false;
             JumpTimer = 0;
+            JumpTimerEndTime = 20;
             IsPressedSpace = false;
             IsDead = false;
             CurrentMovingFloor = null;
@@ -37,6 +41,7 @@ namespace Skatina
         public override void LoadContent(ContentManager content)
         {
             Texture = content.Load<Texture2D>("images/player/player");
+            DeadTexture = content.Load<Texture2D>("images/player/player_dead");
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
@@ -52,75 +57,107 @@ namespace Skatina
 
         public override bool IsOnRightSideWall(List<Entity> entities)
         {
-            foreach (Entity entity in entities)
+            if (!IsDead)
             {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
+                foreach (Entity entity in entities)
                 {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
+                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
                     {
-                        if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left)
+                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
                         {
-                            IsOnRightOfEntity = true;
+                            if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left)
+                            {
+                                IsOnRightOfEntity = true;
 
-                            if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
-                                IsDead = true;
+                                if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
+                                    IsDead = true;
 
-                            return true;
+                                return true;
+                            }
                         }
                     }
                 }
+                IsOnRightOfEntity = false;
+                return false;
             }
-            IsOnRightOfEntity = false;
+
             return false;
         }
 
         public override bool IsOnLeftSideWall(List<Entity> entities)
         {
-            foreach (Entity entity in entities)
+            if (!IsDead)
             {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
+                foreach (Entity entity in entities)
                 {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
+                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
                     {
-                        if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right)
+                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
                         {
-                            IsOnLeftOfEntity = true;
+                            if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right)
+                            {
+                                IsOnLeftOfEntity = true;
 
-                            if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
-                                IsDead = true;
+                                if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
+                                    IsDead = true;
 
-                            return true;
+                                return true;
+                            }
                         }
                     }
                 }
+                IsOnLeftOfEntity = false;
+                return false;
             }
-            IsOnLeftOfEntity = false;
+
             return false;
         }
 
         public override bool IsOnTopFloor(List<Entity> entities)
         {
-            foreach (Entity entity in entities)
+            if (!IsDead)
             {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor)
+                foreach (Entity entity in entities)
                 {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top)
+                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor)
                     {
-                        if ((Rectangle.Left >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Right) ||
-                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
+                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top)
                         {
-                            IsOnTopOfEntity = true;
-                            CurrentMovingFloor = ((Floor)entity).FloorType == FloorType.Moving ? (Floor)entity : null;
-                            CurrentFinishFloor = ((Floor)entity).FloorType == FloorType.Finish ? (Floor)entity : null;
-                            return true;
+                            if ((Rectangle.Left >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Right) ||
+                                (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
+                            {
+                                IsOnTopOfEntity = true;
+                                CurrentMovingFloor = ((Floor)entity).FloorType == FloorType.Moving ? (Floor)entity : null;
+                                CurrentFinishFloor = ((Floor)entity).FloorType == FloorType.Finish ? (Floor)entity : null;
+
+                                if (((Floor)entity).FloorType == FloorType.Jump)
+                                {
+                                    IsJump = true;
+                                    JumpTimerEndTime = 40;
+                                }
+
+                                return true;
+                            }
                         }
                     }
                 }
+                CurrentMovingFloor = null;
+                CurrentFinishFloor = null;
+                IsOnTopOfEntity = false;
+                return false;
             }
-            CurrentMovingFloor = null;
-            CurrentFinishFloor = null;
-            IsOnTopOfEntity = false;
+
             return false;
+        }
+
+        public bool IsOnLeftMap()
+        {
+            return Rectangle.Left <= 0;
+        }
+
+        public bool IsOnRightMap(Map map)
+        {
+            return Rectangle.Right >= map.Levels[map.CurrentLevelIndex].GetWidth();
         }
 
         public void CheckBulletsCollision(List<Bullet> bullets)
@@ -140,7 +177,7 @@ namespace Skatina
 
         public void Jump()
         {
-            if (JumpTimer < 20)
+            if (JumpTimer < JumpTimerEndTime)
             {
                 Gravity = false;
                 JumpTimer++;
@@ -159,13 +196,13 @@ namespace Skatina
  
             if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
             {
-                if (!IsOnRightSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                if (!IsOnRightSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities) && !IsOnRightMap(map))
                     MoveRight();
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                if (!IsOnLeftSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities))
+                if (!IsOnLeftSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities) && !IsOnLeftMap())
                     MoveLeft();
             }
 
@@ -175,6 +212,7 @@ namespace Skatina
                 if (!IsJump && IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities))
                 {
                     IsJump = true;
+                    JumpTimerEndTime = 20;
                 }
             }
 
@@ -189,16 +227,18 @@ namespace Skatina
             return Rectangle.Top >= map.Levels[map.CurrentLevelIndex].GetHeight();
         }
 
-        private void Respawn(Map map)
+        public void Respawn(Map map)
         {
             map.Levels[map.CurrentLevelIndex].AddTry();
+            FallSpeed = 5f;
             IsDead = false;
             IsColide = true;
             SetPosition(new Vector2(0, 0));
         }
 
-        private void RespawnNewLevel(Map map)
+        public void RespawnNewLevel(Map map)
         {
+            FallSpeed = 5f;
             IsDead = false;
             IsColide = true;
             SetPosition(new Vector2(0, 0));
@@ -222,6 +262,7 @@ namespace Skatina
             else
             {
                 IsColide = false;
+                FallSpeed = 8f;
             }
 
             if (IsJump)
@@ -242,20 +283,14 @@ namespace Skatina
                     SetPosition(new Vector2(Position.X - 1, Position.Y));
             }
 
-            if(CurrentFinishFloor != null)
-            {
-                map.NextLevel();
-                RespawnNewLevel(map);
-            }
- 
-
             base.Update(gametime, map);
 
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (Visible)
+                spriteBatch.Draw(!IsDead ? Texture : DeadTexture, Rectangle, Color.White);
         }
     }
 }

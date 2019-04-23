@@ -21,6 +21,7 @@ namespace Skatina
         public bool IsOnLeftOfEntity;
         public bool Visible;
         public bool IsColide;
+        public float FallSpeed;
 
         public Entity(Vector2 position)
         {
@@ -33,6 +34,7 @@ namespace Skatina
             IsOnLeftOfEntity = false;
             Visible = true;
             IsColide = true;
+            FallSpeed = 5f;
         }
 
         public virtual void SetPosition(Vector2 position)
@@ -42,7 +44,7 @@ namespace Skatina
 
         public virtual void Fall()
         {
-            SetPosition(new Vector2(Position.X, Position.Y + 5f));
+            SetPosition(new Vector2(Position.X, Position.Y + FallSpeed));
         }
 
         public virtual bool IsOnTopFloor(List<Entity> entities)

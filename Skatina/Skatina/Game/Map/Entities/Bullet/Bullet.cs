@@ -13,14 +13,11 @@ namespace Skatina
     {
         public const int Width = 36;
         public const int Height = 21;
-
-        private int MoveTimer;
         private Direction MoveDirection;
 
         public Bullet(Vector2 position, Direction moveDirection) : base(position)
         {
             Gravity = false;
-            MoveTimer = 0;
             MoveDirection = moveDirection;
         }
 
