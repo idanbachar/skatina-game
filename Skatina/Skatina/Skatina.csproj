@@ -42,17 +42,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera\Camera.cs" />
-    <Compile Include="Direction.cs" />
-    <Compile Include="Map\Bullet.cs" />
-    <Compile Include="Map\FloorType.cs" />
-    <Compile Include="Map\Wall.cs" />
-    <Compile Include="Map\WallType.cs" />
-    <Compile Include="Skatina.cs" />
-    <Compile Include="Map\Entity.cs" />
-    <Compile Include="Map\Floor.cs" />
-    <Compile Include="Map\Level.cs" />
-    <Compile Include="Map\Map.cs" />
-    <Compile Include="Player\Player.cs" />
+    <Compile Include="Game\Direction.cs" />
+    <Compile Include="Game\Map\Entities\Bullet\Bullet.cs" />
+    <Compile Include="Game\Map\Entities\Floor\FloorType.cs" />
+    <Compile Include="Game\Map\Entities\Wall\Wall.cs" />
+    <Compile Include="Game\Map\Entities\Wall\WallType.cs" />
+    <Compile Include="Game\Skatina.cs" />
+    <Compile Include="Game\Map\Entities\Entity.cs" />
+    <Compile Include="Game\Map\Entities\Floor\Floor.cs" />
+    <Compile Include="Game\Map\Levels\Level.cs" />
+    <Compile Include="Game\Map\Map.cs" />
+    <Compile Include="Game\Player\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
