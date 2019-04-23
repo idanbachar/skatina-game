@@ -112,6 +112,16 @@ namespace Skatina
             CurrentLevelIndex++;
         }
 
+        public int GetTotalTries()
+        {
+            int sumTries = 0;
+
+            foreach (Level level in Levels)
+                sumTries += (level.Tries);
+
+            return sumTries;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach(Entity entity in Levels[CurrentLevelIndex].LevelEntities)

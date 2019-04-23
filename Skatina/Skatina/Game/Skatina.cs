@@ -16,6 +16,8 @@ namespace Skatina
 
         private SpriteFont TitleFont;
 
+        private bool IsGameFinished;
+
         public Skatina()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -23,6 +25,7 @@ namespace Skatina
             IsMouseVisible = true;
             Graphics.PreferredBackBufferWidth = 600;
             Graphics.PreferredBackBufferHeight = 700;
+            IsGameFinished = false;
         }
 
         protected override void Initialize()
@@ -53,15 +56,32 @@ namespace Skatina
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            Camera.Focus(Player.Position,
-                         Map.Levels[Map.CurrentLevelIndex].GetWidth(),
-                         Map.Levels[Map.CurrentLevelIndex].GetHeight()
-                         );
+            if (!IsGameFinished)
+            {
+                Camera.Focus(Player.Position,
+                             Map.Levels[Map.CurrentLevelIndex].GetWidth(),
+                             Map.Levels[Map.CurrentLevelIndex].GetHeight()
+                             );
 
-            Player.Update(gameTime, Map);
+                Player.Update(gameTime, Map);
 
-            foreach (Entity entity in Map.Levels[Map.CurrentLevelIndex].LevelEntities)
-                entity.Update(gameTime, Map);
+
+                if (Player.CurrentFinishFloor != null)
+                {
+                    if (Map.CurrentLevelIndex + 1 == Map.Levels.Length)
+                    {
+                        IsGameFinished = true;
+                    }
+                    else
+                    {
+                        Map.NextLevel();
+                        Player.RespawnNewLevel(Map);
+                    }
+                }
+
+                foreach (Entity entity in Map.Levels[Map.CurrentLevelIndex].LevelEntities)
+                    entity.Update(gameTime, Map);
+            }
 
             base.Update(gameTime);
         }
@@ -70,21 +90,35 @@ namespace Skatina
         {
             GraphicsDevice.Clear(Color.White);
 
-            SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
+            if (!IsGameFinished)
+            {
 
-            Map.Draw(SpriteBatch);
-            Player.Draw(SpriteBatch);
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
 
-            SpriteBatch.End();
+                Map.Draw(SpriteBatch);
+                Player.Draw(SpriteBatch);
 
-            SpriteBatch.Begin();
+                SpriteBatch.End();
+
+                SpriteBatch.Begin();
 
 
-            SpriteBatch.DrawString(TitleFont, "Tries: " + Map.Levels[Map.CurrentLevelIndex].Tries, new Vector2(0, 0), Color.Black);
+                SpriteBatch.DrawString(TitleFont, "Tries: " + Map.Levels[Map.CurrentLevelIndex].Tries, new Vector2(0, 0), Color.Black);
 
-            SpriteBatch.DrawString(TitleFont, "Level (" + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ")", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 50, 50), Color.Black);
+                SpriteBatch.DrawString(TitleFont, "Level (" + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ")", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 50, 50), Color.Black);
 
-            SpriteBatch.End();
+                SpriteBatch.End();
+
+            }
+            else
+            {
+                SpriteBatch.Begin();
+                SpriteBatch.DrawString(TitleFont, "Game Over!", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 60, 150), Color.Red);
+                SpriteBatch.DrawString(TitleFont, "*You Tried " + Map.GetTotalTries() + " times in total.", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 180), Color.Red);
+                SpriteBatch.DrawString(TitleFont, "*You Finished in level " + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ".", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 210), Color.Red);
+                SpriteBatch.DrawString(TitleFont, "Hope you enjoyed!\nAll rights reserved to Idan Bachar.", new Vector2(0, Graphics.PreferredBackBufferHeight - 70), Color.Black);
+                SpriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }

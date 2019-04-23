@@ -23,8 +23,8 @@ namespace Skatina
 
         private Texture2D DeadTexture;
 
-        private Floor CurrentMovingFloor;
-        private Floor CurrentFinishFloor;
+        public Floor CurrentMovingFloor;
+        public Floor CurrentFinishFloor;
 
         public Player(Vector2 position): base(position)
         {
@@ -227,7 +227,7 @@ namespace Skatina
             return Rectangle.Top >= map.Levels[map.CurrentLevelIndex].GetHeight();
         }
 
-        private void Respawn(Map map)
+        public void Respawn(Map map)
         {
             map.Levels[map.CurrentLevelIndex].AddTry();
             FallSpeed = 5f;
@@ -236,7 +236,7 @@ namespace Skatina
             SetPosition(new Vector2(0, 0));
         }
 
-        private void RespawnNewLevel(Map map)
+        public void RespawnNewLevel(Map map)
         {
             FallSpeed = 5f;
             IsDead = false;
@@ -281,12 +281,6 @@ namespace Skatina
                     SetPosition(new Vector2(Position.X + 1, Position.Y));
                 else if (CurrentMovingFloor.MoveDirection == Direction.Left)
                     SetPosition(new Vector2(Position.X - 1, Position.Y));
-            }
-
-            if(CurrentFinishFloor != null)
-            {
-                map.NextLevel();
-                RespawnNewLevel(map);
             }
 
             base.Update(gametime, map);
