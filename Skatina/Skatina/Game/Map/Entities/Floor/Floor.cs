@@ -16,39 +16,43 @@ namespace Skatina
 
         public FloorType FloorType;
         public Direction MoveDirection;
-        private int MoveTimer;
-        private int MaxMoveTimer;
+
+        private float Speed;
+
+        private Vector2 MaxRightPosition;
+        private Vector2 MinLeftPosition;
 
         public Floor(Vector2 position, FloorType floorType) : base(position)
         {
             Gravity = false;
             FloorType = floorType;
-            MoveTimer = 0;
-            MaxMoveTimer = 60;
             MoveDirection = Direction.Right;
+            Speed = 1f;
         }
 
         public void Move()
         {
-            if (MoveTimer < MaxMoveTimer)
+            switch (MoveDirection)
             {
-                MoveTimer++;
-
-                if (MoveDirection == Direction.Right)
-                {
-                    SetPosition(new Vector2(Position.X + 1, Position.Y));
-                }
-
-                if (MoveDirection == Direction.Left)
-                {
-                    SetPosition(new Vector2(Position.X - 1, Position.Y));
-                }
+                case Direction.Right:
+                    if (Position.X <= MaxRightPosition.X)
+                        SetPosition(new Vector2(Position.X + Speed, Position.Y));
+                    else
+                    {
+                        SwapDirection();
+                    }
+                    break;
+                case Direction.Left:
+                    if (Position.X >= MinLeftPosition.X)
+                        SetPosition(new Vector2(Position.X - Speed, Position.Y));
+                    else
+                    {
+                        SwapDirection();
+                    }
+                    break;
             }
-            else
-            {
-                MoveTimer = 0;
-                SwapDirection();
-            }
+
+
         }
 
         private void SwapDirection()
@@ -67,6 +71,8 @@ namespace Skatina
         {
             Texture = content.Load<Texture2D>("images/map/floor");
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+            MaxRightPosition = new Vector2(Position.X + Width + Width / 2, Position.Y);
+            MinLeftPosition = new Vector2(Position.X, Position.Y);
         }
 
         public override void Update(GameTime gametime, Map map)
