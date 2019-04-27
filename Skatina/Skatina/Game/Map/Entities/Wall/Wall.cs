@@ -14,32 +14,37 @@ namespace Skatina
         public const int Width = 18;
         public const int Height = 88;
 
-        private int MoveTimer;
-        private int MaxMoveTimer;
+        public WallType WallType;
+
+        private Vector2 MaxUpPosition;
+        private Vector2 MinDownPosition;
 
         private int StartShootTimer;
 
+        private float Speed;
+
         private Direction MoveDirection;
         private Direction ShootDirection;
-        public WallType WallType;
+
         public List<Bullet> Bullets;
 
         public Wall(Vector2 position, WallType wallType, Direction shootDirection) : base(position)
         {
             Gravity = false;
-            MoveTimer = 0;
-            MaxMoveTimer = 50;
             MoveDirection = Direction.Up;
             ShootDirection = shootDirection;
             WallType = wallType;
             Bullets = new List<Bullet>();
             StartShootTimer = 0;
+            Speed = 3f;
         }
 
         public override void LoadContent(ContentManager content)
         {
             Texture = content.Load<Texture2D>("images/map/wall");
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+            MaxUpPosition = new Vector2(Position.X, Position.Y - Height / 2 * 3);
+            MinDownPosition = new Vector2(Position.X, Position.Y + Height / 2 * 3);
         }
 
         public override void Update(GameTime gametime, Map map)
@@ -85,24 +90,24 @@ namespace Skatina
 
         public void Move()
         {
-            if (MoveTimer < MaxMoveTimer)
+            switch (MoveDirection)
             {
-                MoveTimer++;
-
-                if (MoveDirection == Direction.Up)
-                {
-                    SetPosition(new Vector2(Position.X, Position.Y - 3));
-                }
-
-                if (MoveDirection == Direction.Down)
-                {
-                    SetPosition(new Vector2(Position.X, Position.Y + 3));
-                }
-            }
-            else
-            {
-                MoveTimer = 0;
-                SwapDirection();
+                case Direction.Up:
+                    if (Position.Y >= MaxUpPosition.Y)
+                        SetPosition(new Vector2(Position.X, Position.Y - Speed));
+                    else
+                    {
+                        SwapDirection();
+                    }
+                    break;
+                case Direction.Down:
+                    if (Position.Y <= MinDownPosition.Y)
+                        SetPosition(new Vector2(Position.X, Position.Y + Speed));
+                    else
+                    {
+                        SwapDirection();
+                    }
+                    break;
             }
         }
 
