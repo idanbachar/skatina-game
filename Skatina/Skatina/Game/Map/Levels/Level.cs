@@ -18,6 +18,7 @@ namespace Skatina
             LevelSchema = levelSchema;
             Tries = 0;
             PlayerRespawnPosition = new Vector2(0, 0);
+            LoadLevel();
         }
     
         public int GetWidth()
