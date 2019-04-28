@@ -174,10 +174,14 @@ namespace Skatina
         {
             if (Skatina.GameState == GameState.MainMenu)
             {
+                spriteBatch.DrawString(Font, "Skatina!", new Vector2(Buttons[0].Rectangle.Left + 30, Buttons[0].Rectangle.Top - 40), Color.Black);
+
                 foreach (Button button in Buttons)
                     button.Draw(spriteBatch);
             }
             else if (Skatina.GameState == GameState.EnterName) {
+
+                spriteBatch.DrawString(Font, "Enter Name:", new Vector2(InputText.Rectangle.Left + 30, InputText.Rectangle.Top - 40), Color.Black);
                 InputText.Draw(spriteBatch);
                 spriteBatch.DrawString(Font, Name, new Vector2(InputText.Rectangle.Left + 20, InputText.Rectangle.Top + 18), Color.Red);
                 OkButton.Draw(spriteBatch);
