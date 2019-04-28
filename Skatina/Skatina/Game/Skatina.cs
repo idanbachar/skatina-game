@@ -17,6 +17,7 @@ namespace Skatina
         private MainMenu MainMenu;
         private SpriteFont TitleFont;
         public static GameState GameState;
+        public static string PlayerName;
 
         private bool IsGameFinished;
 
@@ -29,6 +30,7 @@ namespace Skatina
             Graphics.PreferredBackBufferHeight = 700;
             IsGameFinished = false;
             GameState = GameState.MainMenu;
+            PlayerName = string.Empty;
         }
 
         public static void ExitGame()
@@ -70,6 +72,7 @@ namespace Skatina
             switch (GameState)
             {
                 case GameState.Game:
+
                     if (!IsGameFinished)
                     {
                         Camera.Focus(Player.Position,
@@ -98,6 +101,7 @@ namespace Skatina
                     }
                     break;
                 case GameState.MainMenu:
+                case GameState.EnterName:
                     MainMenu.Update(gameTime);
                     break;
             }
@@ -125,7 +129,7 @@ namespace Skatina
 
 
                         SpriteBatch.DrawString(TitleFont, "Tries: " + Map.Levels[Map.CurrentLevelIndex].Tries, new Vector2(0, 0), Color.Black);
-
+                        SpriteBatch.DrawString(TitleFont, PlayerName, new Vector2(0, 25), Color.Red);
 
                         SpriteBatch.DrawString(TitleFont, "Skatina", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 40, 25), Color.Black);
 
@@ -146,6 +150,7 @@ namespace Skatina
                     }
                     break;
                 case GameState.MainMenu:
+                case GameState.EnterName:
                     SpriteBatch.Begin();
                     MainMenu.Draw(SpriteBatch);
                     SpriteBatch.End();
