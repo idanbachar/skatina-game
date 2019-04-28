@@ -140,6 +140,17 @@ namespace Skatina
             {
                 Name = Name.Remove(Name.Length - 1);
             }
+            else if(key == Keys.Back && Name.Length == 0)
+            {
+                Name = string.Empty;
+            }
+            else if(key == Keys.CapsLock)
+            {
+                if (caps)
+                    caps = false;
+                else
+                    caps = true;
+            }
             else if (key == Keys.LeftShift || key == Keys.RightShift)//Sets caps to true if a shift key is pressed
             {
                 caps = true;
