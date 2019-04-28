@@ -102,6 +102,9 @@ namespace Skatina
                     case FloorType.Jump:
                         spriteBatch.Draw(Texture, Rectangle, Color.LightSkyBlue);
                         break;
+                    case FloorType.Deadly:
+                        spriteBatch.Draw(Texture, Rectangle, Color.Red);
+                        break;
                 }                    
             }
         }

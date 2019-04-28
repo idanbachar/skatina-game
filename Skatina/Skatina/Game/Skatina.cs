@@ -42,7 +42,7 @@ namespace Skatina
             TitleFont = GameContent.Load<SpriteFont>("fonts/TitleFont");
             Map = new Map();
 
-            Player = new Player(new Vector2(0, 0));
+            Player = new Player(Map.Levels[Map.CurrentLevelIndex].PlayerRespawnPosition);
             Player.LoadContent(Content);
         }
 

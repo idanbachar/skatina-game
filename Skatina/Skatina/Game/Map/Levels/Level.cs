@@ -12,10 +12,12 @@ namespace Skatina
         public string[,] LevelSchema;
         public List<Entity> LevelEntities;
         public int Tries;
+        public Vector2 PlayerRespawnPosition;
 
         public Level(string[,] levelSchema) {
             LevelSchema = levelSchema;
             Tries = 0;
+            PlayerRespawnPosition = new Vector2(0, 0);
         }
     
         public int GetWidth()
@@ -47,10 +49,20 @@ namespace Skatina
 
                     switch (LevelSchema[y, x])
                     {
+                        case "p":
+                            PlayerRespawnPosition = new Vector2(x * Floor.Width + Player.Width / 2, y * Wall.Height);
+                            break;
                         case "_":
                             xPos = x * Floor.Width;
                             yPos = y * Floor.Width;
                             entity = new Floor(new Vector2(xPos, yPos), FloorType.Regular);
+                            entity.LoadContent(Skatina.GameContent);
+                            LevelEntities.Add(entity);
+                            break;
+                        case "_d":
+                            xPos = x * Floor.Width;
+                            yPos = y * Floor.Width;
+                            entity = new Floor(new Vector2(xPos, yPos), FloorType.Deadly);
                             entity.LoadContent(Skatina.GameContent);
                             LevelEntities.Add(entity);
                             break;

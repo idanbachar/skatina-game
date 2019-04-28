@@ -135,6 +135,10 @@ namespace Skatina
                                     IsJump = true;
                                     JumpTimerEndTime = 40;
                                 }
+                                else if (((Floor)entity).FloorType == FloorType.Deadly)
+                                {
+                                    IsDead = true;
+                                }
 
                                 return true;
                             }
@@ -233,7 +237,7 @@ namespace Skatina
             FallSpeed = 5f;
             IsDead = false;
             IsColide = true;
-            SetPosition(new Vector2(0, 0));
+            SetPosition(map.Levels[map.CurrentLevelIndex].PlayerRespawnPosition);
         }
 
         public void RespawnNewLevel(Map map)
@@ -241,7 +245,7 @@ namespace Skatina
             FallSpeed = 5f;
             IsDead = false;
             IsColide = true;
-            SetPosition(new Vector2(0, 0));
+            SetPosition(map.Levels[map.CurrentLevelIndex].PlayerRespawnPosition);
         }
 
         public override void Update(GameTime gametime, Map map)

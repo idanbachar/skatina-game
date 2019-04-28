@@ -11,6 +11,7 @@ namespace Skatina
         Regular,
         Moving,
         Finish,
-        Jump
+        Jump,
+        Deadly
     }
 }
