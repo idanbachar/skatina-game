@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Skatina
 {
-    public enum FloorType
+    public enum GameState
     {
-        Regular,
-        Moving,
-        Finish,
-        Jump,
-        Deadly
+        MainMenu,
+        EnterName,
+        Game
     }
 }
