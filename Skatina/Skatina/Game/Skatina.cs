@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Skatina
 {
@@ -13,8 +14,9 @@ namespace Skatina
         private Map Map;
         private Player Player;
         private Camera Camera;
-
+        private MainMenu MainMenu;
         private SpriteFont TitleFont;
+        public static GameState GameState;
 
         private bool IsGameFinished;
 
@@ -26,6 +28,12 @@ namespace Skatina
             Graphics.PreferredBackBufferWidth = 600;
             Graphics.PreferredBackBufferHeight = 700;
             IsGameFinished = false;
+            GameState = GameState.MainMenu;
+        }
+
+        public static void ExitGame()
+        {
+            Environment.Exit(Environment.ExitCode);
         }
 
         protected override void Initialize()
@@ -37,6 +45,9 @@ namespace Skatina
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             GameContent = Content;
+
+            MainMenu = new MainMenu();
+            MainMenu.LoadContent(Content);
 
             Camera = new Camera(GraphicsDevice.Viewport);
             TitleFont = GameContent.Load<SpriteFont>("fonts/TitleFont");
@@ -56,31 +67,39 @@ namespace Skatina
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (!IsGameFinished)
+            switch (GameState)
             {
-                Camera.Focus(Player.Position,
-                             Map.Levels[Map.CurrentLevelIndex].GetWidth(),
-                             Map.Levels[Map.CurrentLevelIndex].GetHeight()
-                             );
-
-                Player.Update(gameTime, Map);
-
-
-                if (Player.CurrentFinishFloor != null)
-                {
-                    if (Map.CurrentLevelIndex + 1 == Map.Levels.Length)
+                case GameState.Game:
+                    if (!IsGameFinished)
                     {
-                        IsGameFinished = true;
-                    }
-                    else
-                    {
-                        Map.NextLevel();
-                        Player.RespawnNewLevel(Map);
-                    }
-                }
+                        Camera.Focus(Player.Position,
+                                     Map.Levels[Map.CurrentLevelIndex].GetWidth(),
+                                     Map.Levels[Map.CurrentLevelIndex].GetHeight()
+                                     );
 
-                foreach (Entity entity in Map.Levels[Map.CurrentLevelIndex].LevelEntities)
-                    entity.Update(gameTime, Map);
+                        Player.Update(gameTime, Map);
+
+
+                        if (Player.CurrentFinishFloor != null)
+                        {
+                            if (Map.CurrentLevelIndex + 1 == Map.Levels.Length)
+                            {
+                                IsGameFinished = true;
+                            }
+                            else
+                            {
+                                Map.NextLevel();
+                                Player.RespawnNewLevel(Map);
+                            }
+                        }
+
+                        foreach (Entity entity in Map.Levels[Map.CurrentLevelIndex].LevelEntities)
+                            entity.Update(gameTime, Map);
+                    }
+                    break;
+                case GameState.MainMenu:
+                    MainMenu.Update(gameTime);
+                    break;
             }
 
             base.Update(gameTime);
@@ -90,38 +109,47 @@ namespace Skatina
         {
             GraphicsDevice.Clear(Color.White);
 
-            if (!IsGameFinished)
+            switch (GameState)
             {
+                case GameState.Game:
+                    if (!IsGameFinished)
+                    {
+                        SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
 
-                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Camera.Transform);
+                        Map.Draw(SpriteBatch);
+                        Player.Draw(SpriteBatch);
 
-                Map.Draw(SpriteBatch);
-                Player.Draw(SpriteBatch);
+                        SpriteBatch.End();
 
-                SpriteBatch.End();
-
-                SpriteBatch.Begin();
+                        SpriteBatch.Begin();
 
 
-                SpriteBatch.DrawString(TitleFont, "Tries: " + Map.Levels[Map.CurrentLevelIndex].Tries, new Vector2(0, 0), Color.Black);
+                        SpriteBatch.DrawString(TitleFont, "Tries: " + Map.Levels[Map.CurrentLevelIndex].Tries, new Vector2(0, 0), Color.Black);
 
 
-                SpriteBatch.DrawString(TitleFont, "Skatina", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 40, 25), Color.Black);
+                        SpriteBatch.DrawString(TitleFont, "Skatina", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 40, 25), Color.Black);
 
-                SpriteBatch.DrawString(TitleFont, "Level (" + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ")", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 50, 50), Color.Black);
+                        SpriteBatch.DrawString(TitleFont, "Level (" + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ")", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 50, 50), Color.Black);
 
-                SpriteBatch.End();
+                        SpriteBatch.End();
 
-            }
-            else
-            {
-                SpriteBatch.Begin();
-                SpriteBatch.DrawString(TitleFont, "Skatina", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 40, 25), Color.Black);
-                SpriteBatch.DrawString(TitleFont, "Game Over!", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 60, 150), Color.Red);
-                SpriteBatch.DrawString(TitleFont, "*You Tried " + Map.GetTotalTries() + " times in total.", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 180), Color.Red);
-                SpriteBatch.DrawString(TitleFont, "*You Finished in level " + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ".", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 210), Color.Red);
-                SpriteBatch.DrawString(TitleFont, "Hope you enjoyed!\nAll rights reserved to Idan Bachar.", new Vector2(0, Graphics.PreferredBackBufferHeight - 70), Color.Black);
-                SpriteBatch.End();
+                    }
+                    else
+                    {
+                        SpriteBatch.Begin();
+                        SpriteBatch.DrawString(TitleFont, "Skatina", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 40, 25), Color.Black);
+                        SpriteBatch.DrawString(TitleFont, "Game Over!", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 60, 150), Color.Red);
+                        SpriteBatch.DrawString(TitleFont, "*You Tried " + Map.GetTotalTries() + " times in total.", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 180), Color.Red);
+                        SpriteBatch.DrawString(TitleFont, "*You Finished in level " + (Map.CurrentLevelIndex + 1) + "/" + Map.Levels.Length + ".", new Vector2(Graphics.PreferredBackBufferWidth / 2 - 120, 210), Color.Red);
+                        SpriteBatch.DrawString(TitleFont, "Hope you enjoyed!\nAll rights reserved to Idan Bachar.", new Vector2(0, Graphics.PreferredBackBufferHeight - 70), Color.Black);
+                        SpriteBatch.End();
+                    }
+                    break;
+                case GameState.MainMenu:
+                    SpriteBatch.Begin();
+                    MainMenu.Draw(SpriteBatch);
+                    SpriteBatch.End();
+                    break;
             }
 
             base.Draw(gameTime);

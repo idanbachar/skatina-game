@@ -41,7 +41,10 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Button.cs" />
+    <Compile Include="ButtonType.cs" />
     <Compile Include="Camera\Camera.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="Game\Direction.cs" />
     <Compile Include="Game\Map\Entities\Bullet\Bullet.cs" />
     <Compile Include="Game\Map\Entities\Floor\FloorType.cs" />
@@ -53,6 +56,7 @@
     <Compile Include="Game\Map\Levels\Level.cs" />
     <Compile Include="Game\Map\Map.cs" />
     <Compile Include="Game\Player\Player.cs" />
+    <Compile Include="MainMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
