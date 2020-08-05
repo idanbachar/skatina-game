@@ -7,49 +7,65 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Skatina
-{
-    public class Bullet : Entity
-    {
-        public const int Width = 36;
-        public const int Height = 21;
-        private Direction MoveDirection;
+namespace Skatina {
+    public class Bullet : Entity {
 
-        public Bullet(Vector2 position, Direction moveDirection) : base(position)
-        {
+        public const int Width = 50; //Bullet's width
+        public const int Height = 25; //Bullet's height
+        private Direction MoveDirection; //Bullet's move direction
+        private float Speed; //Bullet's move speed
+
+        /// <summary>
+        /// Receives position, direction and creates a bullet
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="moveDirection"></param>
+        public Bullet(Vector2 position, Direction moveDirection) : base(position) {
             Gravity = false;
             MoveDirection = moveDirection;
+            Speed = 4.5f;
         }
 
-        public override void LoadContent(ContentManager content)
-        {
+        /// <summary>
+        /// Load bullet
+        /// </summary>
+        /// <param name="content"></param>
+        public override void LoadContent(ContentManager content) {
             Texture = content.Load<Texture2D>("images/map/bullet");
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
-        public override void Update(GameTime gametime, Map map)
-        {
+        /// <summary>
+        /// Update bullet
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="map"></param>
+        public override void Update(GameTime gametime, Map map) {
             base.Update(gametime, map);
 
+            //Move bullet:
             Move();
         }
 
-        public void Move()
-        {
-            if (MoveDirection == Direction.Right)
-            {
-                SetPosition(new Vector2(Position.X + 3, Position.Y));
+        /// <summary>
+        /// Moves the bullet by direction
+        /// </summary>
+        public void Move() {
+            if (MoveDirection == Direction.Right) {
+                SetPosition(new Vector2(Position.X + Speed, Position.Y));
             }
 
-            if (MoveDirection == Direction.Left)
-            {
-                SetPosition(new Vector2(Position.X - 3, Position.Y));
+            if (MoveDirection == Direction.Left) {
+                SetPosition(new Vector2(Position.X - Speed, Position.Y));
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
+        /// <summary>
+        /// Draw bullet
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public override void Draw(SpriteBatch spriteBatch) {
+            spriteBatch.Draw(Texture, Rectangle, Color.DarkRed);
         }
     }
 }

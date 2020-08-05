@@ -1,25 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.202
+VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skatina", "Skatina\Skatina.csproj", "{CF46B29E-014D-4633-87B9-032966B526B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skatina", "Skatina\Skatina.csproj", "{226D4FC6-9DF8-4D6D-8620-216F40D80DCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CF46B29E-014D-4633-87B9-032966B526B2}.Debug|x86.ActiveCfg = Debug|x86
-		{CF46B29E-014D-4633-87B9-032966B526B2}.Debug|x86.Build.0 = Debug|x86
-		{CF46B29E-014D-4633-87B9-032966B526B2}.Release|x86.ActiveCfg = Release|x86
-		{CF46B29E-014D-4633-87B9-032966B526B2}.Release|x86.Build.0 = Release|x86
+		{226D4FC6-9DF8-4D6D-8620-216F40D80DCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{226D4FC6-9DF8-4D6D-8620-216F40D80DCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{226D4FC6-9DF8-4D6D-8620-216F40D80DCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{226D4FC6-9DF8-4D6D-8620-216F40D80DCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {64E2268E-0405-4319-8BBF-695F7A48FB0D}
+		SolutionGuid = {CD59BF8E-6931-443F-A1DF-F9BAFE7DBD91}
 	EndGlobalSection
 EndGlobal

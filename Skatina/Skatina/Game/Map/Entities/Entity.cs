@@ -7,24 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skatina
-{
-    public class Entity
-    {
-        public Texture2D Texture;
-        public Rectangle Rectangle;
-        public Vector2 Position;
+namespace Skatina {
+    public class Entity {
 
-        public bool Gravity;
-        public bool IsOnTopOfEntity;
-        public bool IsOnRightOfEntity;
-        public bool IsOnLeftOfEntity;
-        public bool Visible;
-        public bool IsColide;
-        public float FallSpeed;
+        public Texture2D Texture; //Entity's texture
+        public Rectangle Rectangle; //Entity's rectangle
+        public Vector2 Position; //Entity's position
 
-        public Entity(Vector2 position)
-        {
+        public bool Gravity; //Entity's gravity indication
+        public bool IsOnTopOfEntity; //Entity's on top of entity indication
+        public bool IsOnRightOfEntity; //Entity's on right of entity indication
+        public bool IsOnLeftOfEntity; //Entity's on left of entity indication
+        public bool Visible; //Entity's visible indication
+        public bool IsColide; //Entity's colide indication
+        public float FallSpeed; //Entity's fall speed
+
+        /// <summary>
+        /// Receives position and creates an entity
+        /// </summary>
+        /// <param name="position"></param>
+        public Entity(Vector2 position) {
             Position = new Vector2(position.X, position.Y);
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, 0, 0);
 
@@ -37,27 +39,32 @@ namespace Skatina
             FallSpeed = 5f;
         }
 
-        public virtual void SetPosition(Vector2 position)
-        {
+        /// <summary>
+        /// Receives a position and updates it
+        /// </summary>
+        /// <param name="position"></param>
+        public virtual void SetPosition(Vector2 position) {
             Position = new Vector2(position.X, position.Y);
         }
 
-        public virtual void Fall()
-        {
+        /// <summary>
+        /// Makes the entity fall
+        /// </summary>
+        public virtual void Fall() {
             SetPosition(new Vector2(Position.X, Position.Y + FallSpeed));
         }
 
-        public virtual bool IsOnTopFloor(List<Entity> entities)
-        {
-            foreach (Entity entity in entities)
-            {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor)
-                {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top)
-                    {
+        /// <summary>
+        /// Receives list of entities and checks if on top floor, return true else false
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual bool IsOnTopFloor(List<Entity> entities) {
+            foreach (Entity entity in entities) {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor) {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top) {
                         if ((Rectangle.Left >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Right) ||
-                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
-                        {
+                            (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left)) {
                             IsOnTopOfEntity = true;
                             return true;
                         }
@@ -68,16 +75,16 @@ namespace Skatina
             return false;
         }
 
-        public virtual bool IsOnRightSideWall(List<Entity> entities)
-        {
-            foreach (Entity entity in entities)
-            {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
-                {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
-                    {
-                        if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left)
-                        {
+        /// <summary>
+        /// Receives list of entities and checks if on right wall, return true else false
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual bool IsOnRightSideWall(List<Entity> entities) {
+            foreach (Entity entity in entities) {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall) {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom) {
+                        if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left) {
                             IsOnRightOfEntity = true;
                             return true;
                         }
@@ -88,16 +95,16 @@ namespace Skatina
             return false;
         }
 
-        public virtual bool IsOnLeftSideWall(List<Entity> entities)
-        {
-            foreach (Entity entity in entities)
-            {
-                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
-                {
-                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
-                    {
-                        if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right)
-                        {
+        /// <summary>
+        /// Receives list of entities and checks if on left wall, return true else false
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual bool IsOnLeftSideWall(List<Entity> entities) {
+            foreach (Entity entity in entities) {
+                if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall) {
+                    if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom) {
+                        if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right) {
                             IsOnLeftOfEntity = true;
                             return true;
                         }
@@ -108,25 +115,34 @@ namespace Skatina
             return false;
         }
 
-        public virtual void LoadContent(ContentManager content)
-        {
+        /// <summary>
+        /// Load entity
+        /// </summary>
+        /// <param name="content"></param>
+        public virtual void LoadContent(ContentManager content) {
 
         }
 
-        public virtual void Update(GameTime gametime, Map map)
-        {
+        /// <summary>
+        /// Update entity
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="map"></param>
+        public virtual void Update(GameTime gametime, Map map) {
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Rectangle.Width, Rectangle.Height);
 
-            if (Gravity)
-            {
+            if (Gravity) {
                 if (!IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities) || !IsColide)
                     Fall();
             }
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            if(Visible)
+        /// <summary>
+        /// Draw entity
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public virtual void Draw(SpriteBatch spriteBatch) {
+            if (Visible)
                 spriteBatch.Draw(Texture, Rectangle, Color.White);
         }
     }

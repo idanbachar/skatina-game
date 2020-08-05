@@ -8,65 +8,74 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Skatina
-{
-    public class Player : Entity
-    {
-        public const int Width = 38;
-        public const int Height = 38;
-        public bool IsJump;
-        private int JumpTimer;
-        private int JumpTimerEndTime;
-        private bool IsPressedSpace;
-        private bool IsDead;
-        private float Speed;
+namespace Skatina {
+    public class Player : Entity {
 
-        private Texture2D DeadTexture;
+        public const int Width = 60; //Player's width
+        public const int Height = 60; //Player's height
+        public bool IsJump; //Player's jump indication
+        private int JumpTimer; //Player's jump timer
+        private int JumpTimerEndTime; //Player's jump end timer
+        private bool IsPressedSpace; //Press space indication
+        private bool IsDead; //Player's dead indication
+        private float Speed; //Player's speed
 
-        public Floor CurrentMovingFloor;
-        public Floor CurrentFinishFloor;
+        private Texture2D DeadTexture; //Player's dead texture
 
-        public Player(Vector2 position): base(position)
-        {
+        public Floor CurrentMovingFloor; //Current moving floor
+        public Floor CurrentFinishFloor; //Current finish floor
+
+        /// <summary>
+        /// Receives position and creates a player
+        /// </summary>
+        /// <param name="position"></param>
+        public Player(Vector2 position) : base(position) {
             IsJump = false;
             JumpTimer = 0;
-            JumpTimerEndTime = 20;
+            JumpTimerEndTime = 25;
             IsPressedSpace = false;
             IsDead = false;
             CurrentMovingFloor = null;
             CurrentFinishFloor = null;
-            Speed = 2.5f;
+            Speed = 4.5f;
+            FallSpeed = 8f;
         }
 
-        public override void LoadContent(ContentManager content)
-        {
+        /// <summary>
+        /// Load player
+        /// </summary>
+        /// <param name="content"></param>
+        public override void LoadContent(ContentManager content) {
             Texture = content.Load<Texture2D>("images/player/player");
             DeadTexture = content.Load<Texture2D>("images/player/player_dead");
             Rectangle = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
         }
 
-        public void MoveRight()
-        {
+        /// <summary>
+        /// Move player right
+        /// </summary>
+        public void MoveRight() {
             SetPosition(new Vector2(Position.X + Speed, Position.Y));
         }
 
-        public void MoveLeft()
-        {
+        /// <summary>
+        /// Move player left
+        /// </summary>
+        public void MoveLeft() {
             SetPosition(new Vector2(Position.X - Speed, Position.Y));
         }
 
-        public override bool IsOnRightSideWall(List<Entity> entities)
-        {
-            if (!IsDead)
-            {
-                foreach (Entity entity in entities)
-                {
-                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
-                    {
-                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
-                        {
-                            if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left)
-                            {
+        /// <summary>
+        /// Receives list of entities and checks if player on right wall, return true else false
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public override bool IsOnRightSideWall(List<Entity> entities) {
+            if (!IsDead) {
+                foreach (Entity entity in entities) {
+                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall) {
+                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom) {
+                            if (Rectangle.Right >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Left) {
                                 IsOnRightOfEntity = true;
 
                                 if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
@@ -84,18 +93,17 @@ namespace Skatina
             return false;
         }
 
-        public override bool IsOnLeftSideWall(List<Entity> entities)
-        {
-            if (!IsDead)
-            {
-                foreach (Entity entity in entities)
-                {
-                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall)
-                    {
-                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom)
-                        {
-                            if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right)
-                            {
+        /// <summary>
+        /// Receives list of entities and checks if player on left wall, return true else false
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public override bool IsOnLeftSideWall(List<Entity> entities) {
+            if (!IsDead) {
+                foreach (Entity entity in entities) {
+                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Wall) {
+                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Bottom) {
+                            if (Rectangle.Left <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Right) {
                                 IsOnLeftOfEntity = true;
 
                                 if (((Wall)entity).WallType == WallType.Deadly || ((Wall)entity).WallType == WallType.DeadlyMoving)
@@ -113,30 +121,27 @@ namespace Skatina
             return false;
         }
 
-        public override bool IsOnTopFloor(List<Entity> entities)
-        {
-            if (!IsDead)
-            {
-                foreach (Entity entity in entities)
-                {
-                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor)
-                    {
-                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top)
-                        {
+        /// <summary>
+        /// Receives list of entities and checks if player on top floor, return true else false
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public override bool IsOnTopFloor(List<Entity> entities) {
+            if (!IsDead) {
+                foreach (Entity entity in entities) {
+                    if (Rectangle.Intersects(entity.Rectangle) && entity.Visible && entity is Floor) {
+                        if (Rectangle.Bottom >= entity.Rectangle.Top && Rectangle.Top <= entity.Rectangle.Top) {
                             if ((Rectangle.Left >= entity.Rectangle.Left && Rectangle.Left <= entity.Rectangle.Right) ||
-                                (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left))
-                            {
+                                (Rectangle.Right <= entity.Rectangle.Right && Rectangle.Right >= entity.Rectangle.Left)) {
                                 IsOnTopOfEntity = true;
                                 CurrentMovingFloor = ((Floor)entity).FloorType == FloorType.Moving ? (Floor)entity : null;
                                 CurrentFinishFloor = ((Floor)entity).FloorType == FloorType.Finish ? (Floor)entity : null;
 
-                                if (((Floor)entity).FloorType == FloorType.Jump)
-                                {
+                                if (((Floor)entity).FloorType == FloorType.Jump) {
                                     IsJump = true;
-                                    JumpTimerEndTime = 40;
+                                    JumpTimerEndTime = 70;
                                 }
-                                else if (((Floor)entity).FloorType == FloorType.Deadly)
-                                {
+                                else if (((Floor)entity).FloorType == FloorType.Deadly) {
                                     IsDead = true;
                                 }
 
@@ -154,24 +159,40 @@ namespace Skatina
             return false;
         }
 
-        public bool IsOnLeftMap()
-        {
+        /// <summary>
+        ///  Checks if player is on left map, return true else false
+        /// </summary>
+        /// <returns></returns>
+        public bool IsOnLeftMap() {
             return Rectangle.Left <= 0;
         }
 
-        public bool IsOnRightMap(Map map)
-        {
+        /// <summary>
+        ///  Checks if player is on right map, return true else false
+        /// </summary>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        public bool IsOnRightMap(Map map) {
             return Rectangle.Right >= map.Levels[map.CurrentLevelIndex].GetWidth();
         }
 
-        public void CheckBulletsCollision(List<Bullet> bullets)
-        {
-            for(int i = 0; i < bullets.Count; i++)
-            {
-                if(bullets[i] is Bullet)
-                {
-                    if (Rectangle.Intersects(bullets[i].Rectangle))
-                    {
+        /// <summary>
+        /// Receives map, and checks if player is below map, return true else false
+        /// </summary>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        private bool IsBelowMap(Map map) {
+            return Rectangle.Top >= map.Levels[map.CurrentLevelIndex].GetHeight();
+        }
+
+        /// <summary>
+        /// Receives list of bullets and checks if player hit by them, return true else false
+        /// </summary>
+        /// <param name="bullets"></param>
+        public void CheckBulletsCollision(List<Bullet> bullets) {
+            for (int i = 0; i < bullets.Count; i++) {
+                if (bullets[i] is Bullet) {
+                    if (Rectangle.Intersects(bullets[i].Rectangle)) {
                         bullets.RemoveAt(i);
                         IsDead = true;
                     }
@@ -179,108 +200,104 @@ namespace Skatina
             }
         }
 
-        public void Jump()
-        {
-            if (JumpTimer < JumpTimerEndTime)
-            {
+        /// <summary>
+        /// Start player's jump
+        /// </summary>
+        public void Jump() {
+            if (JumpTimer < JumpTimerEndTime) {
                 Gravity = false;
                 JumpTimer++;
-                SetPosition(new Vector2(Position.X, Position.Y - 7));
+                SetPosition(new Vector2(Position.X, Position.Y - Speed * 2));
             }
-            else
-            {
+            else {
                 Gravity = true;
                 JumpTimer = 0;
                 IsJump = false;
             }
         }
 
-        private void CheckKeyBoard(Map map)
-        {
- 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
-            {
+        /// <summary>
+        /// Checks pressing in keyboard
+        /// </summary>
+        /// <param name="map"></param>
+        private void CheckKeyBoard(Map map) {
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D)) {
                 if (!IsOnRightSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities) && !IsOnRightMap(map))
                     MoveRight();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A))
-            {
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.A)) {
                 if (!IsOnLeftSideWall(map.Levels[map.CurrentLevelIndex].LevelEntities) && !IsOnLeftMap())
                     MoveLeft();
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsPressedSpace)
-            {
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && !IsPressedSpace) {
                 IsPressedSpace = true;
-                if (!IsJump && IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities))
-                {
+                if (!IsJump && IsOnTopFloor(map.Levels[map.CurrentLevelIndex].LevelEntities)) {
                     IsJump = true;
-                    JumpTimerEndTime = 20;
+                    JumpTimerEndTime = 25;
                 }
             }
 
-            if (Keyboard.GetState().IsKeyUp(Keys.Space))
-            {
+            if (Keyboard.GetState().IsKeyUp(Keys.Space)) {
                 IsPressedSpace = false;
             }
         }
 
-        private bool IsBelowMap(Map map)
-        {
-            return Rectangle.Top >= map.Levels[map.CurrentLevelIndex].GetHeight();
-        }
-
-        public void Respawn(Map map)
-        {
-            map.Levels[map.CurrentLevelIndex].AddTry();
-            FallSpeed = 5f;
+        /// <summary>
+        /// Receives map and respawn player
+        /// </summary>
+        /// <param name="map"></param>
+        public void Respawn(Map map) {
+            map.Levels[map.CurrentLevelIndex].AddFail();
+            FallSpeed = 10f;
             IsDead = false;
             IsColide = true;
             SetPosition(map.Levels[map.CurrentLevelIndex].PlayerRespawnPosition);
         }
 
-        public void RespawnNewLevel(Map map)
-        {
-            FallSpeed = 5f;
+        /// <summary>
+        /// Receives map and respawn on new level
+        /// </summary>
+        /// <param name="map"></param>
+        public void RespawnNewLevel(Map map) {
+            FallSpeed = 10f;
             IsDead = false;
             IsColide = true;
             SetPosition(map.Levels[map.CurrentLevelIndex].PlayerRespawnPosition);
         }
 
-        public override void Update(GameTime gametime, Map map)
-        {
-            if (!IsDead)
-            {
+        /// <summary>
+        /// Updates player
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="map"></param>
+        public override void Update(GameTime gametime, Map map) {
+            if (!IsDead) {
                 CheckKeyBoard(map);
 
-                foreach (Entity entity in map.Levels[map.CurrentLevelIndex].LevelEntities)
-                {
-                    if (entity is Wall)
-                    {
+                foreach (Entity entity in map.Levels[map.CurrentLevelIndex].LevelEntities) {
+                    if (entity is Wall) {
                         Wall wall = entity as Wall;
                         CheckBulletsCollision(wall.Bullets);
                     }
                 }
             }
-            else
-            {
+            else {
                 IsColide = false;
-                FallSpeed = 8f;
+                FallSpeed = 10f;
             }
 
-            if (IsJump)
-            {
+            if (IsJump) {
                 Jump();
             }
 
-            if (IsBelowMap(map))
-            {
+            if (IsBelowMap(map)) {
                 Respawn(map);
             }
 
-            if(CurrentMovingFloor != null)
-            {
+            if (CurrentMovingFloor != null) {
                 if (CurrentMovingFloor.MoveDirection == Direction.Right)
                     SetPosition(new Vector2(Position.X + 1, Position.Y));
                 else if (CurrentMovingFloor.MoveDirection == Direction.Left)
@@ -291,8 +308,11 @@ namespace Skatina
 
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
+        /// <summary>
+        /// Draws player
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public override void Draw(SpriteBatch spriteBatch) {
             if (Visible)
                 spriteBatch.Draw(!IsDead ? Texture : DeadTexture, Rectangle, Color.White);
         }

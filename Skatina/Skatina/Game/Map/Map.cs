@@ -6,22 +6,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skatina
-{
-    public class Map
-    {
-        public int CurrentLevelIndex;
-        public Level[] Levels;
+namespace Skatina {
+    public class Map {
 
-        public Map()
-        {
+        public int CurrentLevelIndex; //Current map's level index
+        public Level[] Levels; //Map's levels array
+
+        /// <summary>
+        /// Creates a map with levels
+        /// </summary>
+        public Map() {
             Levels = new Level[5];
             CurrentLevelIndex = 0;
             Load();
         }
 
-        public void Load()
-        {
+        /// <summary>
+        /// Load levels in map
+        /// </summary>
+        public void Load() {
             Levels[0] = new Level(new string[,] {
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," ", " ", " "},
                 {" "," "," "," "," "," "," "," "," "," "," "," "," "," "," ", " ", " "},
@@ -116,25 +119,32 @@ namespace Skatina
                 });
         }
 
-        public void NextLevel()
-        {
+        /// <summary>
+        /// Go to next level
+        /// </summary>
+        public void NextLevel() {
             CurrentLevelIndex++;
         }
 
-        public int GetTotalTries()
-        {
+        /// <summary>
+        /// Returns total tries
+        /// </summary>
+        /// <returns></returns>
+        public int GetTotalTries() {
             int sumTries = 0;
 
             foreach (Level level in Levels)
-                sumTries += (level.Tries);
+                sumTries += (level.Fails);
 
             return sumTries;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            foreach(Entity entity in Levels[CurrentLevelIndex].LevelEntities)
-            {
+        /// <summary>
+        /// Draw map
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        public void Draw(SpriteBatch spriteBatch) {
+            foreach (Entity entity in Levels[CurrentLevelIndex].LevelEntities) {
                 if (entity != null)
                     entity.Draw(spriteBatch);
             }

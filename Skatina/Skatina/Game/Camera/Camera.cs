@@ -8,22 +8,28 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
-namespace Skatina
-{
-    public class Camera
-    {
-        public Matrix Transform { get; set; }
-        public Vector2 Position { get; set; }
-        private Vector2 Center;
-        private Viewport Viewport;
+namespace Skatina {
+    public class Camera {
+        public Matrix Transform { get; set; } //Camera's transform
+        public Vector2 Position { get; set; } //Camera's position
+        private Vector2 Center; //Camera's center screen
+        private Viewport Viewport; //Camera's viewport
 
-        public Camera(Viewport viewport)
-        {
+        /// <summary>
+        /// Receives viewport and creates camrea
+        /// </summary>
+        /// <param name="viewport"></param>
+        public Camera(Viewport viewport) {
             Viewport = viewport;
         }
 
-        public void Focus(Vector2 position, int xOffset, int yOffset)
-        {
+        /// <summary>
+        /// Receives position and x,y offsets and focusing object
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        public void Focus(Vector2 position, int xOffset, int yOffset) {
             if (position.X < Viewport.Width / 2)
                 Center.X = Viewport.Width / 2;
             else if (position.X > xOffset - (Viewport.Width / 2))
