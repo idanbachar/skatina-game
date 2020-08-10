@@ -43,3 +43,5 @@ Only lucky people can finish the game.
 ## Credits
 
 Game developed by <a href="https://www.linkedin.com/in/idanbachar/">Idan Bachar</a>.
+
+© 2020 Idan Bachar All Rights Reserved.
