@@ -11,6 +11,13 @@ that get harder when you level up, with new challanging obstacles that make you 
 <br/>
 Only lucky people can finish the game.
 
+
+-Click image below to watch the gameplay video:
+
+<a href="https://www.youtube.com/watch?v=N6J3c4EUL-8">
+    <img src="http://i3.ytimg.com/vi/N6J3c4EUL-8/hqdefault.jpg">
+</a>
+
 ## Rules/How to play
 
 -**Your character** in the game:
