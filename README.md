@@ -1,6 +1,6 @@
 # Skatina
 
-<img width="300" src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/11928066/Skatina.png?width=64">
+<img width="300" src="https://gitlab.com/uploads/-/system/project/avatar/11928066/Skatina.png?width=1">
 
 ## What is Skatina?
 
