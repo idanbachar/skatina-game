@@ -34,7 +34,7 @@ Only lucky people can finish the game.
 | ------ | ------ |
 | **Purple wall (also can move)** - kills the player in touch | <img width="25" height="100" src="https://gitlab.com/idanbachar-xna-games-projects/skatina/uploads/6712a44fb86d1ecac1139f4bc23f8507/wall_obstacle.png">
 | **Blue regular wall (also can move)** - blocks player movement in touch. | <img  width="25" height="100" src="https://gitlab.com/idanbachar-xna-games-projects/skatina/uploads/9862cf65513a92eca7394544da88225f/wall.png">
-| **Purple wall bullets** - kills the player in touch. | <img width="50" height="25" src="https://gitlab.com/idanbachar-xna-games-projects/skatina-project/skatina/uploads/bbff4d99fc76df96c06265f2ea7cde6c/bullet.png">
+| **Purple wall bullets** - kills the player in touch. | <img width="50" height="25" src="https://gitlab.com/idanbachar-xna-games-projects/skatina/uploads/bbff4d99fc76df96c06265f2ea7cde6c/bullet.png">
 | **Floor (also can move)** - can make the player fall to death when moves. | <img width="100" height="25" src="https://gitlab.com/idanbachar-xna-games-projects/skatina/uploads/6c72c3261d021dbdd65b1bbf42c690eb/floor.png">
 | **High-jump floor** - makes the player jump to high that can easily make him touch any obstacles around. | <img width="100" height="25" src="https://gitlab.com/idanbachar-xna-games-projects/skatina/uploads/2e4ebebd18605cfa9e6aeeb31a7ed67f/jumping_floor.png">
 | **Finish floor** - finish current level and starting the next one. | <img width="100" height="25" src="https://gitlab.com/idanbachar-xna-games-projects/skatina/uploads/b9720bee4b94c22da7cd35df66a67c42/finish_floor.png">
