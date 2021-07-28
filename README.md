@@ -2,13 +2,11 @@
 
 ## What is Skatina?
 
-
 **Skatina** is a game that you play as a ball, and your goal is to pass levels
 <br/>
 that get harder when you level up, with new challanging obstacles that make you angry.
 <br/>
 Only lucky people can finish the game.
-
 
 -Click image below to watch the gameplay video:
 
