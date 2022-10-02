@@ -90,7 +90,7 @@ The game contains Five difficulty scaled levels, with different types of obstacl
  </tr>
 </table>
 
-###Gallery
+### Gallery
 <table border="1" cellspacing="0">
  <tr>
   <td>
