@@ -2,7 +2,7 @@
 
 **Skatina** is a single player game where the main character is a ball in a retro graphics world full of deadly obstacles, touch will cause death, 5 challenging stages of increasing difficulty are waiting for you to beat.
 
----
+   <img src="https://github.com/idanbachar/skatina-game/raw/master/images/cover/cover.png?raw=true" width="450" />
 
 ## How to play?
 
