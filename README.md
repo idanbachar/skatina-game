@@ -1,38 +1,117 @@
 # Skatina
 
-## What is Skatina?
+**Skatina** is a single player game where the main character is a ball in a retro graphics world full of deadly obstacles, touch will cause death, 5 challenging stages of increasing difficulty are waiting for you to beat.
 
-**Skatina** is a game that you play as a ball, and your goal is to pass levels
-<br/>
-that get harder when you level up, with new challanging obstacles that make you angry.
-<br/>
-Only lucky people can finish the game.
+---
 
--Click image below to watch the gameplay video:
+## How to play?
 
-<a href="https://www.youtube.com/watch?v=N6J3c4EUL-8">
-    <img src="http://i3.ytimg.com/vi/N6J3c4EUL-8/hqdefault.jpg">
-</a>
+### Character
 
-## Rules/How to play
+This is you:
+<table border="1" cellspacing="0">
+ <tr>
+  <th>Player Alive</th>
+  <th>Player Dead (Most of the time :D)</th>
+ </tr>
+ <tr>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/player/player.png" width="100" />
+  </td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/player/player_dead.png" width="100" />
+  </td>
+ </tr>
+</table>
 
--**Your character** in the game:
+### Obstacles
 
+The game contains Five difficulty scaled levels, with different types of obstacles:
+1. **Purple Moving Floors**
+2. **Red Bullets**
 
-| Alive | Dead |
-| ------ | ------ |
-|<img width="200" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/player/player.png" />| <img width="200" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/player/player_dead.png" />|
+<table border="1" cellspacing="0">
+ <tr>
+  <th>Obstacle</th>
+  <th>Description</th>
+  <th>Image</th>
+ </tr>
+ <tr>
+  <td>**Purple Wall**</td>
+  <td>Stands and also moves. Kills the player immediately on collision.</td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/obstacles/wall_obstacle.png" width="25" />
+  </td>
+ </tr>
+ <tr>
+ 	<td>**Bullet**</td>
+  	<td>Shot from Purple walls. Very fast movement and Kills the player immediately on collision.</td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/obstacles/bullet.png" width="50" />
+  </td>
+ </tr>
+</table>
 
--There are **obstacles with different types** in the game:
+### Objects
 
+<table border="1" cellspacing="0">
+ <tr>
+  <th>Object</th>
+  <th>Description</th>
+  <th>Image</th>
+ </tr>
+ <tr>
+  <td>**Wall**</td>
+  <td>Stands and also moves. Blocks player movement on collision.</td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/wall.png" width="25" />
+  </td>
+ </tr>
+ <tr>
+ 	<td>**Floor**</td>
+  	<td>Without floor, you will fall.</td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/floor.png" width="250" />
+  </td>
+ </tr>
+  <tr>
+ 	<td>**Jumping Floor**</td>
+  	<td>Low gravity jump.</td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/jumping_floor.png" width="250" />
+  </td>
+ </tr>
+   <tr>
+ 	<td>**Finish Floor**</td>
+  	<td>Finish current level on player collision.</td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/finish_floor.png" width="250" />
+  </td>
+ </tr>
+</table>
 
-| Name/Info | Object/Obstacle |
-| ------ | ------ |
-| **Purple wall (also can move)** - kills the player in touch | <img width="25" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/obstacles/wall_obstacle.png" />
-| **Blue regular wall (also can move)** - blocks player movement in touch. | <img width="25" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/objects/wall.png" />
-| **Purple wall bullets** - kills the player in touch. | <img width="25" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/obstacles/bullet.png" />
-| **Floor (also can move)** - can make the player fall to death when moves. | <img width="25" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/objects/floor.png" />
-| **High-jump floor** - makes the player jump to high that can easily make him touch any obstacles around. | <img width="25" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/objects/jumping_floor.png" />
-| **Finish floor** - finish current level and starting the next one. | <img width="25" src="https://raw.githubusercontent.com/idanbachar/skatina-client/master/images/objects/finish_floor.png" />
-
-*The game is hard :)
+###Gallery
+<table border="1" cellspacing="0">
+ <tr>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/gameplay/gameplay_1.png" width="350" />
+  </td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/gameplay/gameplay_2.png" width="350" />
+  </td>
+   <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/gameplay/gameplay_3.png" width="350" />
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/gameplay/gameplay_4.png" width="350" />
+  </td>
+  <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/gameplay/gameplay_5.png" width="350" />
+  </td>
+   <td>
+   <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/gameplay/gameplay_6.png" width="350" />
+  </td>
+ </tr>
+</table>
