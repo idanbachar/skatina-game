@@ -37,14 +37,14 @@ The game contains Five difficulty scaled levels, with different types of obstacl
   <th>Image</th>
  </tr>
  <tr>
-  <td>**Purple Wall**</td>
+  <td>Purple Wall</td>
   <td>Stands and also moves. Kills the player immediately on collision.</td>
   <td>
    <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/obstacles/wall_obstacle.png" width="25" />
   </td>
  </tr>
  <tr>
- 	<td>**Bullet**</td>
+ 	<td>Bullet</td>
   	<td>Shot from Purple walls. Very fast movement and Kills the player immediately on collision.</td>
   <td>
    <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/obstacles/bullet.png" width="50" />
@@ -61,28 +61,28 @@ The game contains Five difficulty scaled levels, with different types of obstacl
   <th>Image</th>
  </tr>
  <tr>
-  <td>**Wall**</td>
+  <td>Wall</td>
   <td>Stands and also moves. Blocks player movement on collision.</td>
   <td>
    <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/wall.png" width="25" />
   </td>
  </tr>
  <tr>
- 	<td>**Floor**</td>
+ 	<td>Floor</td>
   	<td>Without floor, you will fall.</td>
   <td>
    <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/floor.png" width="250" />
   </td>
  </tr>
   <tr>
- 	<td>**Jumping Floor**</td>
+ 	<td>Jumping Floor</td>
   	<td>Low gravity jump.</td>
   <td>
    <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/jumping_floor.png" width="250" />
   </td>
  </tr>
    <tr>
- 	<td>**Finish Floor**</td>
+ 	<td>Finish Floor</td>
   	<td>Finish current level on player collision.</td>
   <td>
    <img src="https://raw.githubusercontent.com/idanbachar/skatina-game/master/images/objects/finish_floor.png" width="250" />
